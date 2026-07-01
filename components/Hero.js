@@ -77,7 +77,17 @@ export default function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.25 }}
-            className="mt-9 flex flex-wrap items-center gap-3"
+            className="mt-7 inline-flex items-center gap-2 rounded-full border border-violet-glow/30 bg-violet-glow/10 px-4 py-2 text-sm text-white/85"
+          >
+            <span className="text-violet-300">⚡</span>
+            Most MVPs ready to ship in 2 weeks
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="mt-6 flex flex-wrap items-center gap-3"
           >
             <a href="#contact" className="moving-border inline-block">
               <span className="block rounded-full px-6 py-3 text-sm font-medium text-white">

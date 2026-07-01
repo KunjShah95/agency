@@ -62,7 +62,7 @@ export default function WhySolo() {
           <div className="relative h-full overflow-hidden rounded-2xl border border-violet-glow/40 bg-gradient-to-b from-violet-glow/12 to-transparent p-7">
             <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-violet-glow/20 blur-3xl" />
             <div className="text-sm font-medium text-violet-200">
-              Kunj Shah Studio
+              Srijan Studio
             </div>
             <ul className="mt-4 divide-y divide-white/5">
               {me.map((t) => (

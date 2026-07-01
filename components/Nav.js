@@ -14,10 +14,10 @@ export default function Nav() {
       <nav className="glass flex w-full max-w-5xl items-center justify-between rounded-full px-4 py-2.5">
         <a href="#top" className="flex items-center gap-2 pl-2">
           <span className="grid h-7 w-7 place-items-center rounded-lg bg-gradient-to-br from-violet-glow to-indigo-500 text-sm font-bold">
-            K
+            S
           </span>
           <span className="text-sm font-semibold tracking-tight">
-            Kunj Shah Studio
+            Srijan Studio
           </span>
         </a>
         <div className="hidden items-center gap-7 md:flex">

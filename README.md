@@ -1,4 +1,4 @@
-# Kunj Shah Studio
+# Srijan Studio
 
 Marketing site for a solo design and tech studio in Ahmedabad. Web development, interface design, AI agents, and AI video.
 

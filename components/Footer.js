@@ -23,12 +23,12 @@ export default function Footer() {
       >
         <div className="flex items-center gap-2">
           <span className="grid h-6 w-6 place-items-center rounded-md bg-gradient-to-br from-violet-glow to-indigo-500 text-xs font-bold">
-            K
+            S
           </span>
-          <span className="text-sm text-white/60">Kunj Shah Studio</span>
+          <span className="text-sm text-white/60">Srijan Studio</span>
         </div>
         <p className="text-xs text-white/35">
-          © {new Date().getFullYear()} Kunj Shah Studio · Web · Design · AI · Video
+          © {new Date().getFullYear()} Srijan Studio · Web · Design · AI · Video
         </p>
       </motion.div>
     </footer>

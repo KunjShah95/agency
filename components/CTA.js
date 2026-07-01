@@ -32,7 +32,7 @@ export default function CTA() {
           </p>
           <div className="mt-9 flex flex-wrap justify-center gap-3">
             <a
-              href="mailto:kkshah2005@gmail.com?subject=Project%20inquiry%20for%20Kunj%20Shah%20Studio"
+              href="mailto:kkshah2005@gmail.com?subject=Project%20inquiry%20for%20Srijan%20Studio"
               className="moving-border inline-block transition-transform hover:scale-105"
             >
               <span className="block rounded-full px-7 py-3.5 text-sm font-medium text-white">

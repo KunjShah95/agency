@@ -1,47 +1,30 @@
 "use client";
 
-import { Reveal } from "./ui";
+import { Reveal, MagneticButton } from "./ui";
 
 export default function CTA() {
-  function onMove(e) {
-    const r = e.currentTarget.getBoundingClientRect();
-    e.currentTarget.style.setProperty("--x", `${e.clientX - r.left}px`);
-    e.currentTarget.style.setProperty("--y", `${e.clientY - r.top}px`);
-  }
-
   return (
-    <section id="contact" className="relative overflow-hidden px-5 py-28 sm:px-8">
-      {/* aurora silk mesh */}
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="aurora absolute left-1/2 top-1/2 h-[380px] w-[760px] -translate-x-1/2 -translate-y-1/2 rounded-[40%] opacity-50" />
-        <div className="absolute inset-0 bg-gradient-to-b from-ink-950 via-transparent to-ink-950" />
-      </div>
-      <Reveal>
-        <div
-          onMouseMove={onMove}
-          className="spot-card glass mx-auto max-w-4xl overflow-hidden rounded-3xl p-10 text-center sm:p-16"
-        >
-          <h2 className="text-3xl font-semibold tracking-tight sm:text-5xl">
-            Got something you
-            <br />
-            <span className="gradient-text">want built?</span>
+    <section id="contact" className="px-6 pb-24 pt-8 sm:px-10">
+      <Reveal className="mx-auto max-w-page">
+        <div className="rounded-editorial border-2 border-ink p-10 text-center sm:p-16 lg:p-24">
+          <div className="font-mono text-xs uppercase tracking-[0.2em] text-vermillion">
+            Start here
+          </div>
+          <h2 className="display mx-auto mt-6 max-w-3xl text-[2.6rem] font-semibold leading-[0.98] sm:text-6xl lg:text-7xl">
+            Got something you want built?
           </h2>
-          <p className="mx-auto mt-5 max-w-lg text-white/55">
-            Tell me what it is. I'll reply with a plan, a timeline, and a real
+          <p className="mx-auto mt-7 max-w-lg text-lg leading-relaxed text-ink-600">
+            Tell me what it is. I reply with a plan, a timeline, and a real
             number, usually the same day.
           </p>
-          <div className="mt-9 flex flex-wrap justify-center gap-3">
-            <a
-              href="mailto:kkshah2005@gmail.com?subject=Project%20inquiry%20for%20Srijan%20Studio"
-              className="moving-border inline-block transition-transform hover:scale-105"
-            >
-              <span className="block rounded-full px-7 py-3.5 text-sm font-medium text-white">
-                Book a call
-              </span>
-            </a>
+
+          <div className="mt-10 flex flex-col items-center gap-6">
+            <MagneticButton href="mailto:kkshah2005@gmail.com?subject=Project%20inquiry%20for%20Srijan%20Studio">
+              Book a call
+            </MagneticButton>
             <a
               href="mailto:kkshah2005@gmail.com"
-              className="rounded-full border border-white/15 px-7 py-3.5 text-sm font-medium text-white/80 transition-colors hover:border-white/40"
+              className="link-underline pb-0.5 font-mono text-sm text-ink"
             >
               kkshah2005@gmail.com
             </a>

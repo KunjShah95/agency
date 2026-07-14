@@ -1,42 +1,49 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./app/**/*.{js,jsx}",
-    "./components/**/*.{js,jsx}",
-  ],
+  content: ["./app/**/*.{js,jsx}", "./components/**/*.{js,jsx}"],
   theme: {
     extend: {
       colors: {
-        ink: {
-          950: "#05060a",
-          900: "#080a12",
-          800: "#0d1020",
-          700: "#141830",
+        // Warm newsprint paper canvas + true ink. One accent: vermillion.
+        paper: {
+          DEFAULT: "#EFEDE6",
+          100: "#F5F3ED",
+          200: "#E7E4DA",
+          300: "#DBD7CA",
         },
-        violet: {
-          glow: "#7c5cff",
+        ink: {
+          DEFAULT: "#16130E",
+          800: "#2A251D",
+          600: "#4A443A",
+          500: "#6B6459",
+          400: "#8C857A",
+        },
+        vermillion: {
+          DEFAULT: "#E23B1E",
+          600: "#C22F14",
+          100: "#F6D9D0",
         },
       },
       fontFamily: {
+        display: ["var(--font-display)", "Georgia", "serif"],
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
-      backgroundImage: {
-        "grid-fade":
-          "radial-gradient(circle at 50% 0%, rgba(124,92,255,0.18), transparent 60%)",
+      maxWidth: {
+        page: "1240px",
+      },
+      borderRadius: {
+        // One radius system: sharp editorial. 2px everywhere structural.
+        editorial: "2px",
       },
       keyframes: {
-        float: {
-          "0%,100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-10px)" },
-        },
-        shimmer: {
-          "0%": { backgroundPosition: "0% 50%" },
-          "100%": { backgroundPosition: "200% 50%" },
+        marquee: {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-50%)" },
         },
       },
       animation: {
-        float: "float 6s ease-in-out infinite",
-        shimmer: "shimmer 8s linear infinite",
+        marquee: "marquee 42s linear infinite",
       },
     },
   },

@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { Reveal, Section, SectionHeader } from "./ui";
 
 const tiers = [
@@ -37,73 +38,83 @@ const tiers = [
   },
 ];
 
-function Check() {
-  return (
-    <svg viewBox="0 0 24 24" className="mt-0.5 h-4 w-4 shrink-0 text-violet-300">
-      <path
-        d="M5 13l4 4L19 7"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
 export default function Packages() {
   return (
     <Section id="packages">
       <SectionHeader
-        eyebrow="Packages"
+        kicker="Packages"
         sub="Rough pricing. You get a firm number after a quick call."
       >
         Pick the level. I build the rest.
       </SectionHeader>
 
-      <div className="mt-12 grid gap-5 lg:grid-cols-3">
-        {tiers.map((t, i) => (
-          <Reveal key={t.name} delay={i * 0.08}>
-            <div
-              className={`relative flex h-full flex-col rounded-2xl p-7 ${
-                t.featured
-                  ? "border border-violet-glow/50 bg-gradient-to-b from-violet-glow/15 to-transparent"
-                  : "glass glass-hover"
-              }`}
-            >
-              {t.featured && (
-                <span className="absolute -top-3 left-7 rounded-full bg-gradient-to-r from-violet-glow to-indigo-500 px-3 py-1 text-xs font-medium">
-                  Most popular
-                </span>
-              )}
-              <div className="flex items-baseline justify-between">
-                <h3 className="text-lg font-semibold">{t.name}</h3>
-                <span className="text-xs text-white/40">{t.time}</span>
-              </div>
-              <div className="mt-3 text-2xl font-semibold">{t.price}</div>
-              <p className="mt-3 text-sm text-white/55">{t.desc}</p>
-              <ul className="mt-6 space-y-3 text-sm text-white/70">
-                {t.features.map((f) => (
-                  <li key={f} className="flex gap-2">
-                    <Check />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <a
-                href="#contact"
-                className={`mt-8 block rounded-full px-5 py-3 text-center text-sm font-medium transition-transform hover:scale-[1.03] ${
-                  t.featured
-                    ? "bg-white text-ink-950"
-                    : "border border-white/15 text-white/85 hover:border-white/40"
+      <div className="mt-14 grid gap-6 lg:grid-cols-3">
+        {tiers.map((t, i) => {
+          const dark = t.featured;
+          return (
+            <Reveal key={t.name} delay={i * 0.08}>
+              <motion.div
+                whileHover={{ y: -8 }}
+                transition={{ type: "spring", stiffness: 240, damping: 20 }}
+                className={`relative flex h-full flex-col rounded-editorial border p-8 text-center ${
+                  dark
+                    ? "border-ink bg-ink text-paper"
+                    : "border-ink/14 bg-paper-100 hover:border-vermillion"
                 }`}
               >
-                {t.cta}
-              </a>
-            </div>
-          </Reveal>
-        ))}
+                {t.featured && (
+                  <span className="mx-auto mb-4 w-fit font-mono text-[11px] uppercase tracking-[0.18em] text-vermillion">
+                    Most picked
+                  </span>
+                )}
+                <div className="display text-xl font-semibold">{t.name}</div>
+                <div
+                  className={`mt-1 font-mono text-xs uppercase tracking-wide ${
+                    dark ? "text-paper/50" : "text-ink-400"
+                  }`}
+                >
+                  {t.time}
+                </div>
+
+                <div className="display mt-6 text-3xl font-semibold">
+                  {t.price}
+                </div>
+                <p
+                  className={`mt-4 text-sm leading-relaxed ${
+                    dark ? "text-paper/70" : "text-ink-600"
+                  }`}
+                >
+                  {t.desc}
+                </p>
+
+                <ul className="mt-7 space-y-3">
+                  {t.features.map((f) => (
+                    <li
+                      key={f}
+                      className={`flex items-center justify-center gap-3 text-sm ${
+                        dark ? "text-paper/85" : "text-ink-800"
+                      }`}
+                    >
+                      <span className="h-1.5 w-1.5 shrink-0 bg-vermillion" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+
+                <a
+                  href="#contact"
+                  className={`mt-8 rounded-editorial px-5 py-3 text-center text-sm font-medium transition-colors active:scale-[0.97] ${
+                    dark
+                      ? "bg-vermillion text-paper hover:bg-paper hover:text-ink"
+                      : "border border-ink text-ink hover:bg-ink hover:text-paper"
+                  }`}
+                >
+                  {t.cta}
+                </a>
+              </motion.div>
+            </Reveal>
+          );
+        })}
       </div>
     </Section>
   );

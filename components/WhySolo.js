@@ -16,57 +16,49 @@ const me = [
   "Built for founders, small business, and local shops",
 ];
 
-function Row({ text, good }) {
-  return (
-    <li className="flex items-start gap-3 py-3">
-      <span
-        className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full text-xs ${
-          good ? "bg-emerald-400/15 text-emerald-400" : "bg-white/5 text-white/40"
-        }`}
-      >
-        {good ? "✓" : "✕"}
-      </span>
-      <span className={good ? "text-sm text-white/80" : "text-sm text-white/45"}>
-        {text}
-      </span>
-    </li>
-  );
-}
-
 export default function WhySolo() {
   return (
     <Section id="why">
       <SectionHeader
-        eyebrow="Why me, not a big shop"
         sub="Big studios are built for enterprise budgets and long timelines. If you have an idea and want it built fast, without the layers, that is the gap I fill."
       >
         Ahmedabad has plenty of 200 person agencies.{" "}
-        <span className="text-white/50">You do not need one.</span>
+        <span className="text-ink-400">You do not need one.</span>
       </SectionHeader>
 
-      <div className="mt-12 grid gap-5 md:grid-cols-2">
-        <Reveal>
-          <div className="glass h-full rounded-2xl p-7">
-            <div className="text-sm font-medium text-white/50">
+      <div className="mt-16 grid gap-px overflow-hidden rounded-editorial border border-ink/14 bg-ink/14 md:grid-cols-2">
+        <Reveal className="bg-paper">
+          <div className="h-full p-8 text-center sm:p-10">
+            <div className="font-mono text-xs uppercase tracking-[0.18em] text-ink-400">
               The big agency
             </div>
-            <ul className="mt-4 divide-y divide-white/5">
+            <ul className="mt-6">
               {them.map((t) => (
-                <Row key={t} text={t} good={false} />
+                <li
+                  key={t}
+                  className="border-t border-ink/12 py-4 text-[15px] leading-relaxed text-ink-500"
+                >
+                  {t}
+                </li>
               ))}
             </ul>
           </div>
         </Reveal>
 
-        <Reveal delay={0.1}>
-          <div className="relative h-full overflow-hidden rounded-2xl border border-violet-glow/40 bg-gradient-to-b from-violet-glow/12 to-transparent p-7">
-            <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-violet-glow/20 blur-3xl" />
-            <div className="text-sm font-medium text-violet-200">
+        <Reveal delay={0.1} className="bg-paper">
+          <div className="relative h-full p-8 text-center sm:p-10">
+            <span className="absolute inset-x-0 top-0 h-1 bg-vermillion" />
+            <div className="font-mono text-xs uppercase tracking-[0.18em] text-vermillion">
               Srijan Studio
             </div>
-            <ul className="mt-4 divide-y divide-white/5">
+            <ul className="mt-6">
               {me.map((t) => (
-                <Row key={t} text={t} good />
+                <li
+                  key={t}
+                  className="border-t border-ink/12 py-4 text-[15px] font-medium leading-relaxed text-ink-800"
+                >
+                  {t}
+                </li>
               ))}
             </ul>
           </div>

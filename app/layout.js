@@ -1,11 +1,23 @@
 import "./globals.css";
-import { Inter } from "next/font/google";
-import Background from "@/components/Background";
+import { Bricolage_Grotesque, Instrument_Sans, Space_Mono } from "next/font/google";
 import SmoothScroll from "@/components/SmoothScroll";
 
-const inter = Inter({
+const display = Bricolage_Grotesque({
+  subsets: ["latin"],
+  variable: "--font-display",
+  display: "swap",
+});
+
+const sans = Instrument_Sans({
   subsets: ["latin"],
   variable: "--font-sans",
+  display: "swap",
+});
+
+const mono = Space_Mono({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-mono",
   display: "swap",
 });
 
@@ -23,10 +35,12 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={inter.variable}>
-      <body>
+    <html
+      lang="en"
+      className={`${display.variable} ${sans.variable} ${mono.variable}`}
+    >
+      <body className="grain font-sans antialiased">
         <SmoothScroll />
-        <Background />
         {children}
       </body>
     </html>

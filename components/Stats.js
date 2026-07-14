@@ -1,19 +1,19 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useInView } from "framer-motion";
-import { Reveal, Section } from "./ui";
+import { useInView, useReducedMotion } from "framer-motion";
 
 function Counter({ to, suffix = "" }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
-  const [n, setN] = useState(0);
+  const reduce = useReducedMotion();
+  const [n, setN] = useState(reduce ? to : 0);
 
   useEffect(() => {
-    if (!inView) return;
+    if (!inView || reduce) return;
     let raf;
     const start = performance.now();
-    const dur = 1200;
+    const dur = 1100;
     const tick = (now) => {
       const p = Math.min((now - start) / dur, 1);
       const eased = 1 - Math.pow(1 - p, 3);
@@ -22,7 +22,7 @@ function Counter({ to, suffix = "" }) {
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [inView, to]);
+  }, [inView, to, reduce]);
 
   return (
     <span ref={ref}>
@@ -32,7 +32,6 @@ function Counter({ to, suffix = "" }) {
   );
 }
 
-// Honest numbers only. No inflated claims.
 const stats = [
   { node: <Counter to={4} />, label: "services under one roof" },
   { node: <Counter to={1} />, label: "person you actually talk to" },
@@ -42,21 +41,24 @@ const stats = [
 
 export default function Stats() {
   return (
-    <Section id="stats" className="py-16">
-      <Reveal>
-        <div className="glass grid grid-cols-2 gap-y-10 rounded-3xl px-6 py-10 md:grid-cols-4">
-          {stats.map((s) => (
-            <div key={s.label} className="text-center">
-              <div className="gradient-text text-4xl font-bold tracking-tight sm:text-5xl">
-                {s.node}
-              </div>
-              <div className="mx-auto mt-2 max-w-[10rem] text-xs text-white/45">
-                {s.label}
-              </div>
+    <section id="stats" className="bg-ink text-paper">
+      <div className="mx-auto grid max-w-page grid-cols-2 gap-y-12 px-6 py-20 sm:px-10 md:grid-cols-4 md:py-24">
+        {stats.map((s, i) => (
+          <div
+            key={s.label}
+            className={`px-2 ${
+              i !== 0 ? "md:border-l md:border-paper/15 md:pl-8" : ""
+            }`}
+          >
+            <div className="display text-5xl font-semibold text-vermillion sm:text-6xl">
+              {s.node}
             </div>
-          ))}
-        </div>
-      </Reveal>
-    </Section>
+            <div className="mt-3 max-w-[11rem] text-sm text-paper/60">
+              {s.label}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }

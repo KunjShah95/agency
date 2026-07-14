@@ -1,7 +1,7 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { Reveal, Section, SectionHeader } from "./ui";
-import DotGrid from "./DotGrid";
 
 const steps = [
   {
@@ -12,7 +12,7 @@ const steps = [
   {
     n: "02",
     t: "Design it",
-    d: "I design the screens and the structure. You review, we adjust, you approve. Nothing gets built you haven't seen.",
+    d: "I design the screens and the structure. You review, we adjust, you approve. Nothing gets built you have not seen.",
   },
   {
     n: "03",
@@ -21,29 +21,35 @@ const steps = [
   },
   {
     n: "04",
-    t: "Launch & fix",
-    d: "We put it live, then I watch how it does and fix what's worth fixing. You're not on your own after launch.",
+    t: "Launch and fix",
+    d: "We put it live, then I watch how it does and fix what is worth fixing. You are not on your own after launch.",
   },
 ];
 
 export default function Process() {
   return (
     <Section id="process">
-      <DotGrid />
-      <SectionHeader eyebrow="How it works">
-        Four steps, and you know where things stand at each one.
+      <SectionHeader kicker="How it works">
+        Four steps, and you always
+        <br className="hidden sm:block" /> know where things stand.
       </SectionHeader>
 
-      <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-16 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
         {steps.map((s, i) => (
           <Reveal key={s.n} delay={i * 0.08}>
-            <div className="glass glass-hover h-full rounded-2xl p-6">
-              <div className="text-3xl font-semibold text-violet-300/70">
+            <motion.div
+              whileHover={{ y: -6 }}
+              transition={{ type: "spring", stiffness: 260, damping: 20 }}
+              className="group flex flex-col items-center text-center"
+            >
+              <div className="display grid h-16 w-16 place-items-center rounded-full border border-ink/20 text-xl font-semibold text-vermillion transition-colors group-hover:border-vermillion">
                 {s.n}
               </div>
-              <h3 className="mt-4 text-lg font-semibold">{s.t}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-white/55">{s.d}</p>
-            </div>
+              <h3 className="display mt-6 text-xl font-semibold">{s.t}</h3>
+              <p className="mx-auto mt-3 max-w-xs text-sm leading-relaxed text-ink-600">
+                {s.d}
+              </p>
+            </motion.div>
           </Reveal>
         ))}
       </div>

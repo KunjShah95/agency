@@ -7,10 +7,11 @@ function Counter({ to, suffix = "" }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   const reduce = useReducedMotion();
-  const [n, setN] = useState(reduce ? to : 0);
+  const [n, setN] = useState(0);
 
   useEffect(() => {
-    if (!inView || reduce) return;
+    if (!inView) return;
+    if (reduce) return setN(to);
     let raf;
     const start = performance.now();
     const dur = 1100;

@@ -1,66 +1,185 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { MagneticButton } from "./ui";
+import { site, services, openBrief } from "@/lib/site";
+import { track } from "@/lib/track";
 
-const offerings = ["Websites", "Product design", "AI systems", "Video"];
+function useLocalTime() {
+  const [t, setT] = useState(null);
+  useEffect(() => {
+    const fmt = new Intl.DateTimeFormat("en-IN", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+      timeZone: site.timezone,
+    });
+    const tick = () => setT(fmt.format(new Date()));
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
+  return t;
+}
+
+function StatusCard({ enter }) {
+  const time = useLocalTime();
+  const rows = [
+    ["Local time", time ? `${time} IST` : "—"],
+    ["Status", site.availability],
+    ["Replies", site.replyTime],
+    ["Typical build", "2 to 6 weeks"],
+  ];
+
+  return (
+    <motion.aside
+      {...enter(0.25)}
+      aria-label="Studio status"
+      className="relative mx-auto w-full max-w-[460px] lg:ml-auto"
+    >
+      <div className="relative border border-ink/15 bg-paper-100 shadow-[0_30px_80px_-30px_rgba(22,19,14,0.35)]">
+        <div className="flex items-center justify-between border-b border-ink/12 px-5 py-3.5 font-mono text-[10px] uppercase tracking-[0.18em] text-ink-500">
+          <span>Studio status</span>
+          <span className="flex items-center gap-2 text-ink-600">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#3a9d5d] opacity-60 motion-reduce:hidden" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#3a9d5d]" />
+            </span>
+            Live
+          </span>
+        </div>
+
+        <dl className="divide-y divide-ink/10 px-5">
+          {rows.map(([k, v]) => (
+            <div key={k} className="flex items-baseline justify-between gap-6 py-3.5">
+              <dt className="text-sm text-ink-500">{k}</dt>
+              <dd className="text-right font-mono text-sm tabular-nums text-ink">{v}</dd>
+            </div>
+          ))}
+        </dl>
+
+        <div className="border-t border-ink/12 bg-paper-200/60 px-5 pb-5 pt-4">
+          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-500">
+            What do you need?
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {services.map((s) => (
+              <button
+                key={s.id}
+                type="button"
+                onClick={() => {
+                  track("service_briefed", { service: s.id, source: "hero_status" });
+                  openBrief(s.id, "hero_status");
+                }}
+                className="group flex items-center gap-1.5 border border-ink/20 bg-paper-100 px-3 py-2 text-sm text-ink-800 transition-colors hover:border-ink hover:bg-ink hover:text-paper"
+              >
+                {s.label}
+                <span aria-hidden="true" className="text-vermillion transition-transform group-hover:translate-x-0.5 group-hover:text-paper">
+                  →
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="absolute -bottom-4 -left-3 rotate-[-3deg] border border-ink/15 bg-paper px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-ink-600 shadow-sm sm:-left-8">
+        Fixed price before any work starts
+      </div>
+    </motion.aside>
+  );
+}
+
+/* Hand-drawn underline that draws itself in under the key phrase. */
+function Scribble({ children, reduce }) {
+  return (
+    <span className="relative inline-block whitespace-nowrap">
+      <span className="relative z-10">{children}</span>
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 300 20"
+        preserveAspectRatio="none"
+        className="absolute -bottom-1 left-0 z-0 h-[0.32em] w-full text-vermillion sm:-bottom-2"
+      >
+        <motion.path
+          d="M3 14 C 60 4, 120 4, 170 10 S 260 17, 297 6"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="5"
+          strokeLinecap="round"
+          initial={{ pathLength: 0 }}
+          animate={{ pathLength: 1 }}
+          transition={{ duration: 0.9, delay: 0.75, ease: [0.65, 0, 0.35, 1] }}
+        />
+      </svg>
+    </span>
+  );
+}
 
 export default function Hero() {
   const reduce = useReducedMotion();
   const enter = (delay = 0) => ({
-    initial: reduce ? false : { opacity: 0, y: 18 },
+    initial: { opacity: 0, y: 18 },
     animate: { opacity: 1, y: 0 },
     transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] },
   });
 
   return (
-    <section id="top" className="relative overflow-hidden px-6 pb-20 pt-28 sm:px-10 sm:pb-28 sm:pt-36">
-      <div className="mx-auto grid max-w-page items-center gap-14 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
-        <div>
-          <motion.p {...enter(0)} className="flex items-center gap-2.5 font-mono text-xs uppercase tracking-[0.2em] text-ink-500">
-            <span className="h-2 w-2 rounded-full bg-vermillion" />
-            Independent design & technology studio · Ahmedabad
+    <section id="top" className="relative overflow-hidden px-6 pb-20 pt-28 sm:px-10 sm:pb-24 sm:pt-36">
+      {/* faint blueprint grid, fades out toward the bottom */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.5] [background-image:linear-gradient(rgba(22,19,14,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(22,19,14,0.06)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(ellipse_at_30%_20%,#000_20%,transparent_70%)]"
+      />
+
+      <div className="mx-auto grid max-w-page items-center gap-16 lg:grid-cols-[1.2fr_0.8fr]">
+        <div className="min-w-0">
+          <motion.p {...enter(0)} className="flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.16em] text-ink-500 sm:text-xs sm:tracking-[0.2em]">
+            <span className="h-2 w-2 shrink-0 rounded-full bg-vermillion" />
+            Design & engineering studio · {site.city}
           </motion.p>
-          <motion.h1 {...enter(0.1)} className="display mt-8 max-w-4xl text-[3.5rem] font-semibold leading-[0.94] tracking-[-0.055em] sm:text-7xl lg:text-[6.2rem]">
-            Good ideas deserve <span className="text-vermillion">great</span> digital experiences.
+
+          <motion.h1
+            {...enter(0.1)}
+            className="display mt-8 max-w-4xl text-[2.75rem] font-semibold leading-[0.95] tracking-[-0.045em] sm:text-7xl lg:text-[5.6rem]"
+          >
+            Websites, products and AI, built by{" "}
+            <Scribble reduce={reduce}>one person.</Scribble>
           </motion.h1>
-          <motion.p {...enter(0.22)} className="mt-7 max-w-xl text-lg leading-relaxed text-ink-600 sm:text-xl">
-            I design and build the websites, products and AI tools that help ambitious teams move forward. One thoughtful partner, from first sketch to launch.
+
+          <motion.p {...enter(0.22)} className="mt-8 max-w-xl text-lg leading-relaxed text-ink-600 sm:text-xl">
+            For founders and small businesses who want it done properly and done
+            fast. You talk to the person doing the work, get a real number up
+            front, and launch in weeks, not quarters.
           </motion.p>
-          <motion.div {...enter(0.34)} className="mt-9 flex flex-wrap items-center gap-4">
-            <MagneticButton href="#contact">Tell me what you’re building <span aria-hidden="true">↗</span></MagneticButton>
-            <a href="#work" className="link-underline py-2 text-sm font-medium">Explore selected work</a>
+
+          <motion.div {...enter(0.34)} className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-4">
+            <MagneticButton
+              href="#contact"
+              onClick={() => track("cta_clicked", { source: "hero" })}
+            >
+              Start a project <span aria-hidden="true">↗</span>
+            </MagneticButton>
+            <a href="#work" className="link-underline py-2 text-sm font-medium">
+              See live work first
+            </a>
           </motion.div>
-          <motion.div {...enter(0.44)} className="mt-12 flex flex-wrap gap-x-6 gap-y-2 border-t border-ink/14 pt-5">
-            {offerings.map((item) => <span key={item} className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-500">{item}</span>)}
-          </motion.div>
+
+          <motion.ul {...enter(0.44)} className="mt-12 flex flex-wrap gap-x-7 gap-y-2 border-t border-ink/14 pt-5 text-sm text-ink-600">
+            {["You own all the code", "Page 1 on Google for a live client", `Reply ${site.replyTime}`].map((item) => (
+              <li key={item} className="flex items-center gap-2">
+                <svg aria-hidden="true" viewBox="0 0 12 12" className="h-3 w-3 text-vermillion">
+                  <path d="M1.5 6.5 4.5 9.5 10.5 2.5" fill="none" stroke="currentColor" strokeWidth="1.8" />
+                </svg>
+                {item}
+              </li>
+            ))}
+          </motion.ul>
         </div>
 
-        <motion.div {...enter(0.2)} className="relative mx-auto w-full max-w-[520px] lg:ml-auto">
-          <div className="absolute -right-7 -top-8 h-36 w-36 rounded-full bg-vermillion/10 blur-2xl" />
-          <div className="relative overflow-hidden border border-ink/12 bg-[#e7e4da] p-3 shadow-[0_24px_80px_rgba(22,19,14,0.10)] sm:p-5">
-            <div className="flex items-center justify-between border-b border-ink/10 px-2 pb-3 font-mono text-[10px] uppercase tracking-[0.16em] text-ink-500">
-              <span>From idea to shipped</span><span>01 — 04</span>
-            </div>
-            <div className="grid grid-cols-[1fr_48px] gap-3 p-2 sm:gap-5 sm:p-4">
-              <div className="space-y-3">
-                <div className="flex h-28 items-end bg-[#253b32] p-4 sm:h-36 sm:p-5">
-                  <span className="display max-w-[210px] text-2xl font-semibold leading-none text-[#f4eee2] sm:text-3xl">Make the next thing matter.</span>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="flex h-24 flex-col justify-between bg-[#e9ad85] p-3 sm:h-28 sm:p-4"><span className="font-mono text-[9px] uppercase tracking-widest">01 / Understand</span><span className="display text-lg font-semibold">Find the signal.</span></div>
-                  <div className="flex h-24 flex-col justify-between bg-[#d1d9ca] p-3 sm:h-28 sm:p-4"><span className="font-mono text-[9px] uppercase tracking-widest">02 / Shape</span><span className="display text-lg font-semibold">Make it clear.</span></div>
-                </div>
-                <div className="flex items-center justify-between border-t border-ink/15 pt-3 text-xs text-ink-600"><span>Design, technology, all connected.</span><span aria-hidden="true">↗</span></div>
-              </div>
-              <div className="flex flex-col items-center justify-between rounded-full border border-ink/15 py-4 font-mono text-[9px] uppercase tracking-widest text-ink-500 [writing-mode:vertical-rl]">Strategy · Design · Build</div>
-            </div>
-          </div>
-          <div className="absolute -bottom-5 -left-4 rotate-[-4deg] bg-paper px-4 py-2 font-mono text-[10px] uppercase tracking-[0.12em] shadow-md sm:-left-8">Small studio. Big-picture thinking.</div>
-        </motion.div>
-      </div>
-      <div className="mx-auto mt-20 grid max-w-page grid-cols-1 border-t border-ink/14 pt-6 sm:grid-cols-3 sm:gap-8">
-        {[["01", "Direct collaboration", "Work with the person doing the work."], ["02", "Thoughtful by design", "Clear, useful, built around your people."], ["03", "Ahmedabad to anywhere", "Local perspective, open reach."]].map(([n, title, body]) => <div key={n} className="flex gap-4 border-b border-ink/10 py-4 sm:border-0 sm:py-0"><span className="font-mono text-xs text-vermillion">{n}</span><div><div className="text-sm font-semibold">{title}</div><p className="mt-1 text-sm text-ink-500">{body}</p></div></div>)}
+        <StatusCard enter={enter} />
       </div>
     </section>
   );

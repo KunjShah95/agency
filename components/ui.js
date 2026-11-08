@@ -6,13 +6,15 @@ import {
   useMotionValue,
   useSpring,
   useReducedMotion,
+  useScroll,
+  useTransform,
 } from "framer-motion";
 
 /*
  * Magnetic button: pulls gently toward the cursor and presses on tap.
  * Uses motion values (never state) so it stays smooth on mobile.
  */
-export function MagneticButton({ href, children, variant = "solid", className = "" }) {
+export function MagneticButton({ href, children, variant = "solid", className = "", onClick, ...rest }) {
   const ref = useRef(null);
   const reduce = useReducedMotion();
   const x = useMotionValue(0);
@@ -21,7 +23,7 @@ export function MagneticButton({ href, children, variant = "solid", className = 
   const sy = useSpring(y, { stiffness: 220, damping: 18 });
 
   function onMove(e) {
-    if (reduce || !ref.current) return;
+    if (reduce || !ref.current || e.pointerType === "touch") return;
     const r = ref.current.getBoundingClientRect();
     x.set((e.clientX - (r.left + r.width / 2)) * 0.28);
     y.set((e.clientY - (r.top + r.height / 2)) * 0.28);
@@ -40,11 +42,13 @@ export function MagneticButton({ href, children, variant = "solid", className = 
     <motion.a
       ref={ref}
       href={href}
-      onMouseMove={onMove}
-      onMouseLeave={reset}
+      onPointerMove={onMove}
+      onPointerLeave={reset}
+      onClick={onClick}
+      {...rest}
       style={{ x: sx, y: sy }}
       whileTap={{ scale: 0.96 }}
-      className={`inline-block rounded-editorial px-7 py-4 text-sm font-medium transition-colors ${styles} ${className}`}
+      className={`inline-flex items-center gap-2 rounded-editorial px-7 py-4 text-sm font-medium transition-colors ${styles} ${className}`}
     >
       {children}
     </motion.a>
@@ -55,7 +59,7 @@ export function Reveal({ children, delay = 0, className = "" }) {
   const reduce = useReducedMotion();
   return (
     <motion.div
-      initial={reduce ? false : { opacity: 0, y: 22 }}
+      initial={{ opacity: 0, y: 22 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
@@ -109,5 +113,41 @@ export function SectionHeader({ kicker, children, sub }) {
         </p>
       )}
     </Reveal>
+  );
+}
+
+/*
+ * Scroll-linked reading: each word goes from faint to full ink as the
+ * paragraph passes through the viewport. Tied to scroll position, not time,
+ * so it never moves on its own.
+ */
+function Word({ children, progress, range, still }) {
+  const opacity = useTransform(progress, range, [0.16, 1]);
+  return (
+    <motion.span style={{ opacity }} className="inline-block">
+      {children}&nbsp;
+    </motion.span>
+  );
+}
+
+export function ScrollWords({ text, className = "", accent = [] }) {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start 0.85", "end 0.45"],
+  });
+  const words = text.split(" ");
+  return (
+    <p ref={ref} className={className}>
+      {words.map((w, i) => {
+        const start = i / words.length;
+        const end = start + 1 / words.length;
+        return (
+          <Word key={i} progress={scrollYProgress} range={[start, end]}>
+            <span className={accent.includes(w.replace(/[.,]/g, "")) ? "text-vermillion" : ""}>{w}</span>
+          </Word>
+        );
+      })}
+    </p>
   );
 }

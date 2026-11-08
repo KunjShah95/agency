@@ -2,10 +2,14 @@
 
 import { motion } from "framer-motion";
 import { Reveal, Section, SectionHeader } from "./ui";
+import { openBrief } from "@/lib/site";
+import { track } from "@/lib/track";
 
 const services = [
   {
     tag: "01",
+    id: "web",
+    price: "from ₹15,000",
     title: "Web Development",
     body: "Websites and web apps that load fast and hold up on a phone. Built in Next.js, so they rank on Google and you own the code. No Wix, no lock in.",
     points: ["Landing and marketing sites", "MVPs and web apps", "Online stores"],
@@ -14,6 +18,8 @@ const services = [
   },
   {
     tag: "02",
+    id: "design",
+    price: "from ₹15,000",
     title: "Interface Design",
     body: "The screens people actually use. I map the flow, design the layout, and build a component set your product can grow into. Clean and usable, not clever for its own sake.",
     points: ["Product and app design", "Design systems", "Prototypes and flows"],
@@ -22,6 +28,8 @@ const services = [
   },
   {
     tag: "03",
+    id: "agent",
+    price: "from ₹15,000",
     title: "AI Agents",
     body: "Agents that do a real job. Answer support, pull research, run a workflow. Wired into your own docs and tools, not a toy chatbot. Something you would leave running.",
     points: ["Chat and support agents", "Workflow automation", "RAG and tool use"],
@@ -30,6 +38,8 @@ const services = [
   },
   {
     tag: "04",
+    id: "video",
+    price: "quoted per reel",
     title: "AI Video",
     body: "Short AI made videos for launches and ads. Product reels, explainers, social clips. I write it, generate it, and hand you a file that is ready to post.",
     points: ["Product and promo reels", "Explainer videos", "Social ad content"],
@@ -63,7 +73,7 @@ export default function Services() {
               <p className="mt-4 max-w-lg text-[15px] leading-relaxed text-ink-600">
                 {s.body}
               </p>
-              <ul className="mt-7 flex flex-wrap gap-x-5 gap-y-2 border-t border-ink/15 pt-4">
+              <ul className="mt-7 flex flex-wrap gap-x-5 gap-y-2">
                 {s.points.map((p) => (
                   <li
                     key={p}
@@ -73,6 +83,20 @@ export default function Services() {
                   </li>
                 ))}
               </ul>
+              <div className="mt-7 flex items-center justify-between gap-4 border-t border-ink/15 pt-4">
+                <span className="font-mono text-xs text-ink-600">{s.price}</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    track("service_briefed", { service: s.id, source: "services" });
+                    openBrief(s.id, "services");
+                  }}
+                  className="group/btn flex items-center gap-2 text-sm font-medium text-ink"
+                >
+                  <span className="link-underline pb-0.5">Brief this</span>
+                  <span aria-hidden="true" className="grid h-7 w-7 place-items-center rounded-full border border-ink/25 transition-all duration-300 group-hover/btn:-rotate-45 group-hover/btn:border-vermillion group-hover/btn:bg-vermillion group-hover/btn:text-paper">→</span>
+                </button>
+              </div>
             </motion.div>
           </Reveal>
         ))}

@@ -32,7 +32,11 @@ Push to a Git repo and import into [Vercel](https://vercel.com/new). Framework p
 
 ## Editing
 
+- Studio facts (email, WhatsApp, availability, reply time): `lib/site.js`
+- Analytics events: `lib/track.js` (set `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` to enable)
+- Research and design rationale: `docs/RESEARCH.md`
+
 - Services and copy: `components/Services.js`
 - Pricing (INR): `components/Packages.js`
 - Real project / case study: `components/Work.js` (+ image in `public/work/`)
-- Contact email: `components/CTA.js`
+- Brief form: `components/CTA.js`

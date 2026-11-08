@@ -1,6 +1,6 @@
 "use client";
 
-import { Reveal, Section, SectionHeader } from "./ui";
+import { Reveal, Section, SectionHeader, ScrollWords } from "./ui";
 
 const them = [
   "Projects start around 4,00,000 rupees and climb from there",
@@ -25,6 +25,12 @@ export default function WhySolo() {
         Ahmedabad has plenty of 200 person agencies.{" "}
         <span className="text-ink-400">You do not need one.</span>
       </SectionHeader>
+
+      <ScrollWords
+        accent={["same", "person"]}
+        text="No account managers. No handoffs. No junior quietly doing the work you paid a senior for. The person on the first call is the same person writing the code, the prompts and the copy."
+        className="display mx-auto mt-16 max-w-4xl text-center text-2xl font-medium leading-snug tracking-[-0.02em] sm:text-4xl"
+      />
 
       <div className="mt-16 grid gap-px overflow-hidden rounded-editorial border border-ink/14 bg-ink/14 md:grid-cols-2">
         <Reveal className="bg-paper">

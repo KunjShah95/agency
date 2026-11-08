@@ -2,6 +2,14 @@
 
 import { motion } from "framer-motion";
 import { Reveal, Section, SectionHeader } from "./ui";
+import { track } from "@/lib/track";
+
+const promises = [
+  ["Fixed price", "Agreed in writing before work starts."],
+  ["You own it", "Code, design files, domain. All yours."],
+  ["No lock in", "No page builder, no monthly ransom."],
+  ["Real updates", "A live preview link the whole way through."],
+];
 
 const tiers = [
   {
@@ -87,7 +95,7 @@ export default function Packages() {
                   {t.desc}
                 </p>
 
-                <ul className="mt-7 space-y-3">
+                <ul className="mb-8 mt-7 space-y-3">
                   {t.features.map((f) => (
                     <li
                       key={f}
@@ -103,7 +111,8 @@ export default function Packages() {
 
                 <a
                   href="#contact"
-                  className={`mt-8 rounded-editorial px-5 py-3 text-center text-sm font-medium transition-colors active:scale-[0.97] ${
+                  onClick={() => track("cta_clicked", { source: `package_${t.name}` })}
+                  className={`mt-auto rounded-editorial px-5 py-3 text-center text-sm font-medium transition-colors active:scale-[0.97] ${
                     dark
                       ? "bg-vermillion text-paper hover:bg-paper hover:text-ink"
                       : "border border-ink text-ink hover:bg-ink hover:text-paper"
@@ -116,6 +125,22 @@ export default function Packages() {
           );
         })}
       </div>
+
+      <Reveal delay={0.1}>
+        <ul className="mt-10 grid gap-px overflow-hidden border border-ink/14 bg-ink/14 sm:grid-cols-2 lg:grid-cols-4">
+          {promises.map(([k, v]) => (
+            <li key={k} className="flex gap-3 bg-paper p-5">
+              <svg aria-hidden="true" viewBox="0 0 12 12" className="mt-1 h-3 w-3 shrink-0 text-vermillion">
+                <path d="M1.5 6.5 4.5 9.5 10.5 2.5" fill="none" stroke="currentColor" strokeWidth="1.8" />
+              </svg>
+              <div>
+                <div className="text-sm font-semibold">{k}</div>
+                <div className="mt-0.5 text-sm text-ink-500">{v}</div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </Reveal>
     </Section>
   );
 }

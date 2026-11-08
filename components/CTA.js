@@ -43,7 +43,11 @@ export default function CTA() {
   const [timeline, setTimeline] = useState("");
   const [name, setName] = useState("");
   const [note, setNote] = useState("");
+  const [phone, setPhone] = useState("");
+  const [company, setCompany] = useState(""); // honeypot, hidden from people
+  // false | "auto" (landed on the studio WhatsApp) | "manual" (visitor must tap send)
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
 
   const start = (source = "form") => {
     if (started.current) return;
@@ -76,6 +80,7 @@ export default function CTA() {
   const labels = [...services, { id: "other", label: "Something else" }].filter((s) => picked.includes(s.id)).map((s) => s.label);
   const message = [
     `Hi, I'm ${name || "…"}.`,
+    ...(phone ? [`My WhatsApp: ${phone}`] : []),
     "",
     `I need: ${labels.join(", ") || "not sure yet"}`,
     `Budget: ${budget || "not sure yet"}`,
@@ -83,12 +88,29 @@ export default function CTA() {
     ...(note ? ["", `About the project: ${note}`] : []),
   ].join("\n");
 
-  const canNext = [picked.length > 0, Boolean(budget && timeline), name.trim().length > 1][step];
+  const phoneDigits = phone.replace(/\D/g, "");
+  const phoneOk = phoneDigits.length >= 10 && phoneDigits.length <= 15;
+  const canNext = [picked.length > 0, Boolean(budget && timeline), name.trim().length > 1 && phoneOk][step];
   const wa = whatsappLink(message);
+  const mail = mailto(`Project brief: ${labels.join(", ") || "new project"}`, message);
 
-  const send = (channel) => {
-    track("brief_submitted", { channel, services: picked.join(","), budget, timeline });
-    setSent(true);
+  /* Send straight to the studio WhatsApp. If that is not set up or fails,
+     fall back to a one-tap pre-filled WhatsApp message. */
+  const submit = async () => {
+    if (!canNext || sending) return;
+    setSending(true);
+    let delivered = false;
+    try {
+      const res = await fetch("/api/brief", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, phone, services: labels, budget, timeline, note, company }),
+      });
+      delivered = (await res.json())?.delivered === true;
+    } catch {}
+    setSending(false);
+    setSent(delivered ? "auto" : "manual");
+    track("brief_submitted", { channel: delivered ? "direct" : "fallback", services: picked.join(","), budget, timeline });
   };
 
   const slide = {
@@ -107,7 +129,7 @@ export default function CTA() {
             Tell me what you <Serif>want built.</Serif>
           </h2>
           <p className="mx-auto mt-5 max-w-md text-neutral-400 sm:text-lg">
-            Three taps and a sentence. I reply {site.replyTime} with a plan, a
+            Three taps, your name and number. I reply {site.replyTime} with a plan, a
             timeline and a real number.
           </p>
         </Reveal>
@@ -146,12 +168,39 @@ export default function CTA() {
                   {sent ? (
                     <motion.div key="sent" {...slide} className="flex h-full flex-col items-center justify-center text-center">
                       <div className="grid h-14 w-14 place-items-center rounded-full bg-ember/15 text-2xl text-ember">✓</div>
-                      <div className="mt-6 text-3xl font-semibold text-white">Thanks{name ? `, ${name.split(" ")[0]}` : ""}.</div>
-                      <p className="mt-3 max-w-sm text-neutral-400">
-                        Your message should be open and ready to send in your mail or WhatsApp app. Once it lands, I reply {site.replyTime}.
-                      </p>
-                      <button type="button" onClick={() => { setSent(false); setStep(2); }} className="mt-6 text-sm text-neutral-400 underline decoration-white/20 underline-offset-4 hover:text-white">
-                        Didn&apos;t open? Try again
+                      {sent === "auto" ? (
+                        <>
+                          <div className="mt-6 text-3xl font-semibold text-white">Got it{name ? `, ${name.split(" ")[0]}` : ""}.</div>
+                          <p className="mt-3 max-w-sm text-neutral-400">
+                            Your brief just landed on my WhatsApp. I&apos;ll message you on {phone} {site.replyTime} with a plan and a real number.
+                          </p>
+                        </>
+                      ) : (
+                        <>
+                          <div className="mt-6 text-3xl font-semibold text-white">One last tap{name ? `, ${name.split(" ")[0]}` : ""}.</div>
+                          <p className="mt-3 max-w-sm text-neutral-400">
+                            Your brief is written. Open WhatsApp and press send, and I reply {site.replyTime}.
+                          </p>
+                          <div className="mt-6 flex flex-wrap justify-center gap-3">
+                            {wa && (
+                              <a
+                                href={wa}
+                                target="_blank"
+                                rel="noreferrer"
+                                onClick={() => track("whatsapp_clicked", { source: "brief_fallback" })}
+                                className="inline-flex h-12 items-center gap-2 rounded-full bg-[#25d366] px-6 text-sm font-medium text-[#062b14] transition-transform active:scale-[0.98]"
+                              >
+                                <WhatsAppIcon /> Send on WhatsApp
+                              </a>
+                            )}
+                            <a href={mail} className="inline-flex h-12 items-center rounded-full border border-white/15 px-6 text-sm text-white hover:border-white/40">
+                              Email instead
+                            </a>
+                          </div>
+                        </>
+                      )}
+                      <button type="button" onClick={() => { setSent(false); setStep(2); }} className="mt-6 text-sm text-neutral-500 underline decoration-white/20 underline-offset-4 hover:text-white">
+                        Edit my brief
                       </button>
                     </motion.div>
                   ) : step === 0 ? (
@@ -194,6 +243,31 @@ export default function CTA() {
                         />
                       </label>
                       <label className="block">
+                        <span className="text-sm text-neutral-400">Your WhatsApp number <span className="text-neutral-600">(so I can reply)</span></span>
+                        <div className="mt-2 flex items-center rounded-2xl border border-white/10 bg-white/[0.03] transition-colors focus-within:border-ember">
+                          <span className="pl-4 pr-2 text-[15px] text-neutral-500">+91</span>
+                          <input
+                            type="tel"
+                            inputMode="tel"
+                            autoComplete="tel-national"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value.replace(/[^\d +-]/g, "").slice(0, 16))}
+                            placeholder="98765 43210"
+                            className="w-full bg-transparent py-3.5 pr-4 text-[15px] text-white outline-none placeholder:text-neutral-600"
+                          />
+                        </div>
+                        {phone && !phoneOk && <span className="mt-1.5 block text-xs text-ember">Enter a 10 digit mobile number.</span>}
+                      </label>
+                      <input
+                        type="text"
+                        tabIndex={-1}
+                        autoComplete="off"
+                        aria-hidden="true"
+                        value={company}
+                        onChange={(e) => setCompany(e.target.value)}
+                        className="absolute -left-[9999px] h-0 w-0 opacity-0"
+                      />
+                      <label className="block">
                         <span className="text-sm text-neutral-400">One line about the project <span className="text-neutral-600">(optional)</span></span>
                         <textarea
                           value={note}
@@ -224,27 +298,18 @@ export default function CTA() {
                       Next →
                     </button>
                   ) : (
-                    <div className="flex flex-wrap gap-3">
-                      {wa && (
-                        <a
-                          href={canNext ? wa : undefined}
-                          target="_blank"
-                          rel="noreferrer"
-                          aria-disabled={!canNext}
-                          onClick={(e) => (canNext ? send("whatsapp") : e.preventDefault())}
-                          className={`inline-flex h-12 items-center gap-2 rounded-full border border-white/15 px-6 text-sm font-medium text-white transition-colors hover:border-[#25d366] hover:text-[#25d366] ${canNext ? "" : "pointer-events-none opacity-25"}`}
-                        >
-                          <WhatsAppIcon /> Send on WhatsApp
-                        </a>
-                      )}
-                      <a
-                        href={canNext ? mailto(`Project brief: ${labels.join(", ") || "new project"}`, message) : undefined}
-                        aria-disabled={!canNext}
-                        onClick={(e) => (canNext ? send("email") : e.preventDefault())}
-                        className={`inline-flex h-12 items-center gap-2 rounded-full bg-ember px-6 text-sm font-medium text-night shadow-[0_0_30px_-6px_rgba(255,91,46,0.8)] transition-colors hover:bg-white ${canNext ? "" : "pointer-events-none opacity-25"}`}
-                      >
-                        Send my brief ↗
+                    <div className="flex flex-wrap items-center gap-4">
+                      <a href={canNext ? mail : undefined} aria-disabled={!canNext} className={`text-sm text-neutral-500 underline decoration-white/20 underline-offset-4 hover:text-white ${canNext ? "" : "pointer-events-none opacity-40"}`}>
+                        or email
                       </a>
+                      <button
+                        type="button"
+                        disabled={!canNext || sending}
+                        onClick={submit}
+                        className="inline-flex h-12 items-center gap-2 rounded-full bg-ember px-6 text-sm font-medium text-night shadow-[0_0_30px_-6px_rgba(255,91,46,0.8)] transition-colors hover:bg-white disabled:cursor-not-allowed disabled:opacity-25 disabled:hover:bg-ember"
+                      >
+                        {sending ? "Sending…" : "Send my brief ↗"}
+                      </button>
                     </div>
                   )}
                 </div>

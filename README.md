@@ -20,6 +20,19 @@ npm run build
 npm start
 ```
 
+## Briefs straight to WhatsApp
+
+The contact form posts to `app/api/brief/route.js`, which forwards each brief to the studio WhatsApp (+91 91068 78258) through [CallMeBot](https://www.callmebot.com/blog/free-api-whatsapp-messages/), a free service for messaging your own number.
+
+1. From the studio WhatsApp, follow CallMeBot's activation steps (you message their number once and get an API key back).
+2. In Vercel → Project → Settings → Environment Variables, add `CALLMEBOT_APIKEY` with that key, then redeploy.
+
+Until the key is set, or if sending fails, the form shows a one-tap "Send on WhatsApp" button with the brief pre-written, so no lead is lost.
+
+## Share preview
+
+`app/opengraph-image.js` and `app/twitter-image.js` draw the link preview card at build time (fonts in `assets/og/`).
+
 ## Deploy
 
 Push to a Git repo and import into [Vercel](https://vercel.com/new). Framework preset: **Next.js**. No env vars needed.

@@ -40,9 +40,16 @@ export const metadata = {
   description:
     "A one person design and engineering studio in Ahmedabad. Websites, UI/UX, AI agents and AI video for founders and small businesses. Fixed price, live in weeks.",
   openGraph: {
-    title: "Srijan Studio",
-    description: "Websites, interfaces, AI agents and AI video, built by one person.",
+    title: "Srijan Studio · Websites, products and AI, built by one person",
+    description: "A one person design and engineering studio in Ahmedabad. Fixed price, live in 7 days.",
     type: "website",
+    siteName: "Srijan Studio",
+    locale: "en_IN",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Srijan Studio · Websites, products and AI, built by one person",
+    description: "A one person design and engineering studio in Ahmedabad. Fixed price, live in 7 days.",
   },
 };
 

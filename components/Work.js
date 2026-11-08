@@ -42,7 +42,7 @@ const projects = [
     results: [
       ["Page 1", "Google, local LIC searches"],
       ["6 goals", "each one a pre-filled WhatsApp"],
-      ["Own domain", "jigishakiranshah.in"],
+      ["Visit ↗", "jigishakiranshah.in", "https://jigishakiranshah.in/"],
     ],
     // Reviews from Jigisha's own clients, shown on the testimonials section
     // built for her site. Labelled as such: they praise her, not the studio.
@@ -155,12 +155,26 @@ function Case({ p, i }) {
             ))}
           </dl>
           <div className="mt-8 grid grid-cols-3 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10">
-            {p.results.map(([k, v]) => (
-              <div key={k} className="bg-night-900 p-4">
-                <div className="text-xl font-semibold tracking-tight text-white sm:text-2xl">{k}</div>
-                <div className="mt-1 text-xs leading-snug text-neutral-500">{v}</div>
-              </div>
-            ))}
+            {p.results.map(([k, v, href]) =>
+              href ? (
+                <a
+                  key={k}
+                  href={href}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => track("work_opened", { project: p.id, source: "result_link" })}
+                  className="group/link bg-night-900 p-4 transition-colors hover:bg-night-800"
+                >
+                  <div className="text-xl font-semibold tracking-tight text-ember sm:text-2xl">{k}</div>
+                  <div className="mt-1 break-all text-xs leading-snug text-neutral-300 underline decoration-ember/40 underline-offset-2 group-hover/link:decoration-ember">{v}</div>
+                </a>
+              ) : (
+                <div key={k} className="bg-night-900 p-4">
+                  <div className="text-xl font-semibold tracking-tight text-white sm:text-2xl">{k}</div>
+                  <div className="mt-1 text-xs leading-snug text-neutral-500">{v}</div>
+                </div>
+              )
+            )}
           </div>
           {p.siteReviews && (
             <div className="mt-8">

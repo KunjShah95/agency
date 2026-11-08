@@ -7,6 +7,7 @@ import Reveal from "./fx/Reveal";
 import { Serif } from "./fx/Section";
 import { site, services, budgets, timelines, mailto, whatsappLink } from "@/lib/site";
 import { track } from "@/lib/track";
+import WhatsAppIcon from "./WhatsAppIcon";
 
 /*
  * Three short steps instead of one long form. Every step is a tap, so the
@@ -231,9 +232,9 @@ export default function CTA() {
                           rel="noreferrer"
                           aria-disabled={!canNext}
                           onClick={(e) => (canNext ? send("whatsapp") : e.preventDefault())}
-                          className={`inline-flex h-12 items-center rounded-full border border-white/15 px-6 text-sm font-medium text-white transition-colors hover:border-[#25d366] hover:text-[#25d366] ${canNext ? "" : "pointer-events-none opacity-25"}`}
+                          className={`inline-flex h-12 items-center gap-2 rounded-full border border-white/15 px-6 text-sm font-medium text-white transition-colors hover:border-[#25d366] hover:text-[#25d366] ${canNext ? "" : "pointer-events-none opacity-25"}`}
                         >
-                          Send on WhatsApp
+                          <WhatsAppIcon /> Send on WhatsApp
                         </a>
                       )}
                       <a
@@ -261,10 +262,24 @@ export default function CTA() {
           </figure>
 
           <p className="mt-8 text-center text-sm text-neutral-500">
-            Prefer to write?{" "}
+            Prefer to message directly?{" "}
             <a href={mailto("Project inquiry")} className="text-neutral-300 underline decoration-white/20 underline-offset-4 hover:text-white">
               {site.email}
             </a>
+            {site.whatsapp && (
+              <>
+                {" "}or{" "}
+                <a
+                  href={whatsappLink("Hi, I'd like to talk about a project.")}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => track("whatsapp_clicked", { source: "contact" })}
+                  className="inline-flex items-center gap-1 text-neutral-300 underline decoration-white/20 underline-offset-4 hover:text-[#25d366]"
+                >
+                  <WhatsAppIcon className="h-3.5 w-3.5" /> WhatsApp {site.phone}
+                </a>
+              </>
+            )}
           </p>
         </Reveal>
       </div>

@@ -1,12 +1,19 @@
+const v = (name) => `rgb(var(${name}) / <alpha-value>)`;
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./app/**/*.{js,jsx}", "./components/**/*.{js,jsx}"],
   theme: {
     extend: {
+      // Every colour is a CSS variable (see globals.css), so light and dark
+      // themes share the exact same classes. "white" means "foreground" and
+      // "night" means "background"; the neutral scale flips with the theme.
       colors: {
-        // True, slightly cool black. One accent: ember.
-        night: { DEFAULT: "#050505", 900: "#0a0a0a", 800: "#111111", 700: "#171717" },
-        ember: { DEFAULT: "#ff5b2e", 400: "#ff7a52", 600: "#e5431a", glow: "rgba(255,91,46,0.35)" },
+        white: v("--c-fg"),
+        night: { DEFAULT: v("--c-bg"), 900: v("--c-bg-900"), 800: v("--c-bg-800"), 700: v("--c-bg-700") },
+        neutral: Object.fromEntries([100, 200, 300, 400, 500, 600, 700, 800, 900].map((n) => [n, v(`--n-${n}`)])),
+        ember: { DEFAULT: v("--c-ember"), 400: v("--c-ember-400"), 600: v("--c-ember-600") },
+        live: v("--c-live"),
       },
       fontFamily: {
         sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],

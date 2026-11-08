@@ -4,6 +4,7 @@ import { GeistMono } from "geist/font/mono";
 import { Instrument_Serif } from "next/font/google";
 import Script from "next/script";
 import Motion from "@/components/Motion";
+import { themeScript } from "@/components/ThemeToggle";
 import SmoothScroll from "@/components/SmoothScroll";
 import { site } from "@/lib/site";
 
@@ -45,11 +46,19 @@ export const metadata = {
   },
 };
 
-export const viewport = { themeColor: "#050505" };
+export const viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#050505" },
+    { media: "(prefers-color-scheme: light)", color: "#faf9f6" },
+  ],
+};
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable} ${serif.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${GeistSans.variable} ${GeistMono.variable} ${serif.variable}`}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="font-sans antialiased">
         <SmoothScroll />
         <Motion>{children}</Motion>

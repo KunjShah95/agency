@@ -51,7 +51,7 @@ function WebVisual() {
           className="rounded-lg bg-gradient-to-br from-ember/40 via-ember/10 to-transparent"
         />
       </div>
-      <div className="absolute bottom-3 right-4 font-mono text-[10px] text-[#7ee2a0]">● live</div>
+      <div className="absolute bottom-3 right-4 font-mono text-[10px] text-live">● live</div>
     </div>
   );
 }

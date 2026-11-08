@@ -67,7 +67,7 @@ const projects = [
 /* Typographic stand-ins until real screenshots are added to public/work/. */
 function SwarnikaPoster() {
   return (
-    <div className="relative grid aspect-[16/10] place-items-center overflow-hidden bg-[radial-gradient(ellipse_at_50%_0%,#3a2a12_0%,#17110a_45%,#070605_85%)]">
+    <div className="theme-dark relative grid aspect-[16/10] place-items-center overflow-hidden bg-[radial-gradient(ellipse_at_50%_0%,#3a2a12_0%,#17110a_45%,#070605_85%)]">
       <div aria-hidden="true" className="absolute inset-6 rounded-[14px] border border-[#d9b36c]/20" />
       <div aria-hidden="true" className="absolute left-1/2 top-1/3 h-28 w-28 -translate-x-1/2 rounded-full bg-[#d9b36c]/25 blur-3xl" />
       <div className="relative px-6 text-center">
@@ -87,7 +87,7 @@ function SwarnikaPoster() {
 
 function Poster() {
   return (
-    <div className="relative grid aspect-[16/10] place-items-center overflow-hidden bg-[radial-gradient(ellipse_at_50%_120%,#3b1d14_0%,#120b09_45%,#050505_80%)]">
+    <div className="theme-dark relative grid aspect-[16/10] place-items-center overflow-hidden bg-[radial-gradient(ellipse_at_50%_120%,#3b1d14_0%,#120b09_45%,#050505_80%)]">
       <div aria-hidden="true" className="dots absolute inset-0 opacity-40" />
       <div className="absolute left-1/2 top-[18%] h-24 w-24 -translate-x-1/2 rounded-full bg-ember/40 blur-3xl" />
       <div className="relative text-center">

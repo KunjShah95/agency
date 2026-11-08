@@ -1,4 +1,5 @@
-import { site, mailto } from "@/lib/site";
+import { site, mailto, whatsappLink } from "@/lib/site";
+import WhatsAppIcon from "./WhatsAppIcon";
 
 const links = [
   ["Services", "#services"],
@@ -21,6 +22,11 @@ export default function Footer() {
           <a href={mailto("Project inquiry")} className="mt-5 inline-block font-mono text-sm text-white underline decoration-ember underline-offset-4">
             {site.email}
           </a>
+          {site.whatsapp && (
+            <a href={whatsappLink("Hi, I'd like to talk about a project.")} target="_blank" rel="noreferrer" className="mt-3 flex w-fit items-center gap-2 font-mono text-sm text-neutral-300 transition-colors hover:text-[#25d366]">
+              <WhatsAppIcon /> {site.phone}
+            </a>
+          )}
         </div>
         <nav aria-label="Footer">
           <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-neutral-600">Site</div>

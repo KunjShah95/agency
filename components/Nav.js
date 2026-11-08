@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
 import MovingBorder from "./fx/MovingBorder";
+import ThemeToggle from "./ThemeToggle";
 import { site } from "@/lib/site";
 import { track } from "@/lib/track";
 
@@ -27,7 +28,7 @@ export default function Nav() {
         animate={{ maxWidth: compact ? 860 : 1200 }}
         transition={{ type: "spring", stiffness: 260, damping: 30 }}
         className={`relative w-full rounded-full border transition-colors duration-300 ${
-          compact ? "border-white/10 bg-night-900/70 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.8)] backdrop-blur-xl" : "border-transparent"
+          compact ? "border-white/10 bg-night-900/70 shadow-[0_10px_40px_-10px_var(--float-shadow)] backdrop-blur-xl" : "border-transparent"
         }`}
       >
         <div className="flex h-14 items-center justify-between pl-5 pr-2">
@@ -47,6 +48,7 @@ export default function Nav() {
           </ul>
 
           <div className="flex items-center gap-2">
+            <ThemeToggle />
             <MovingBorder
               href="#contact"
               onClick={() => track("cta_clicked", { source: "nav" })}

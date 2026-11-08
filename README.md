@@ -33,7 +33,8 @@ Push to a Git repo and import into [Vercel](https://vercel.com/new). Framework p
 
 ## Editing
 
-- Studio facts (email, WhatsApp, availability, reply time): `lib/site.js`
+- Studio facts (email, WhatsApp, availability, reply time, site URL): `lib/site.js`
+- Light and dark themes: colour tokens in `app/globals.css` (`:root` is dark, `:root.light` is light). Components only use the shared classes, so both themes stay in sync automatically.
 - Analytics events: `lib/track.js` (set `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` to enable)
 - Research and design rationale: `docs/RESEARCH.md`
 

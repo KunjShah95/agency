@@ -4,7 +4,7 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Reveal from "./fx/Reveal";
 import { Section, Heading } from "./fx/Section";
-import { site, mailto } from "@/lib/site";
+import { site, mailto, whatsappLink } from "@/lib/site";
 
 const faqs = [
   ["I'm not technical. Can you still help?", "That is most of who I work with. I handle the design, the code, the AI and the video, and explain what I'm doing in normal words. You bring the idea."],
@@ -44,7 +44,7 @@ export default function FAQ() {
             <p className="mt-5 text-neutral-400">
               Not here?{" "}
               <a href={mailto("Question")} className="text-white underline decoration-ember underline-offset-4">Email me</a>
-              {" "}and I reply {site.replyTime}.
+              {site.whatsapp && <>{" "}or <a href={whatsappLink("Hi, I have a question.")} target="_blank" rel="noreferrer" className="text-white underline decoration-ember underline-offset-4">WhatsApp</a></>}{" "}and I reply {site.replyTime}.
             </p>
           </Reveal>
         </div>

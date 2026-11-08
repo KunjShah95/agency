@@ -68,10 +68,10 @@ export default function Hero() {
           href="#contact"
           className="group inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.04] py-1.5 pl-2 pr-4 text-xs text-neutral-300 backdrop-blur transition-colors hover:border-white/20"
         >
-          <span className="flex items-center gap-1.5 rounded-full bg-[#1f3d2a] px-2 py-0.5 font-medium text-[#7ee2a0]">
+          <span className="flex items-center gap-1.5 rounded-full bg-live/15 px-2 py-0.5 font-medium text-live">
             <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#7ee2a0] opacity-70" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#7ee2a0]" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-live opacity-70" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-live" />
             </span>
             Open
           </span>

@@ -3,87 +3,60 @@
 @tailwind utilities;
 
 :root {
-  --paper: #efede6;
-  --ink: #16130e;
-  --vermillion: #e23b1e;
+  color-scheme: dark;
 }
 
 html {
-  scroll-behavior: smooth;
+  background: #050505;
 }
 
 body {
-  background: var(--paper);
-  color: var(--ink);
+  background: #050505;
+  color: #e5e5e5;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: var(--vermillion);
-  color: #fff;
+  background: #ff5b2e;
+  color: #050505;
 }
 
-/* Editorial display: tight, confident headlines */
-.display {
-  font-family: var(--font-display), Georgia, serif;
-  letter-spacing: -0.02em;
-  line-height: 0.98;
+/* Faint dot grid, faded toward the edges */
+.dots {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.11) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+.fade-edges {
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+  mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
+}
+.fade-x {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
 }
 
-/* Hairline rule used to separate content instead of cards */
-.rule {
-  border-top: 1px solid rgba(22, 19, 14, 0.16);
+/* Silver headline text, brighter at the top */
+.text-silver {
+  background: linear-gradient(180deg, #fafafa 20%, #a3a3a3 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
-/* One marquee, understated */
-.marquee-mask {
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent,
-    #000 8%,
-    #000 92%,
-    transparent
-  );
-  mask-image: linear-gradient(
-    to right,
-    transparent,
-    #000 8%,
-    #000 92%,
-    transparent
-  );
-}
-
-/* Subtle paper grain, fixed + non-interactive (perf-safe) */
-.grain::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  pointer-events: none;
-  opacity: 0.035;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-/* Link underline that draws on hover, ink then vermillion */
-.link-underline {
-  background-image: linear-gradient(var(--vermillion), var(--vermillion));
-  background-size: 0% 1.5px;
-  background-position: 0 100%;
-  background-repeat: no-repeat;
-  transition: background-size 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.link-underline:hover {
-  background-size: 100% 1.5px;
+/* Focus that is visible on black */
+:focus-visible {
+  outline: 2px solid #ff5b2e;
+  outline-offset: 3px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  .animate-marquee,
-  .link-underline {
-    animation: none !important;
-    transition: none !important;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }

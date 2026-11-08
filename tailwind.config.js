@@ -4,46 +4,32 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Warm newsprint paper canvas + true ink. One accent: vermillion.
-        paper: {
-          DEFAULT: "#EFEDE6",
-          100: "#F5F3ED",
-          200: "#E7E4DA",
-          300: "#DBD7CA",
-        },
-        ink: {
-          DEFAULT: "#16130E",
-          800: "#2A251D",
-          600: "#4A443A",
-          500: "#6B6459",
-          400: "#8C857A",
-        },
-        vermillion: {
-          DEFAULT: "#E23B1E",
-          600: "#C22F14",
-          100: "#F6D9D0",
-        },
+        // True, slightly cool black. One accent: ember.
+        night: { DEFAULT: "#050505", 900: "#0a0a0a", 800: "#111111", 700: "#171717" },
+        ember: { DEFAULT: "#ff5b2e", 400: "#ff7a52", 600: "#e5431a", glow: "rgba(255,91,46,0.35)" },
       },
       fontFamily: {
-        display: ["var(--font-display)", "Georgia", "serif"],
-        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
-        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
+        sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
+        mono: ["var(--font-geist-mono)", "ui-monospace", "monospace"],
+        serif: ["var(--font-serif)", "Georgia", "serif"],
       },
-      maxWidth: {
-        page: "1240px",
-      },
-      borderRadius: {
-        // One radius system: sharp editorial. 2px everywhere structural.
-        editorial: "2px",
-      },
+      maxWidth: { page: "1200px" },
       keyframes: {
-        marquee: {
-          from: { transform: "translateX(0)" },
-          to: { transform: "translateX(-50%)" },
+        marquee: { to: { transform: "translateX(-50%)" } },
+        spin: { to: { transform: "rotate(360deg)" } },
+        spotlight: {
+          "0%": { opacity: 0, transform: "translate(-72%, -62%) scale(0.5)" },
+          "100%": { opacity: 1, transform: "translate(-50%, -40%) scale(1)" },
         },
+        shimmer: { to: { backgroundPosition: "-200% 0" } },
+        blink: { "50%": { opacity: 0 } },
       },
       animation: {
-        marquee: "marquee 42s linear infinite",
+        marquee: "marquee var(--duration, 40s) linear infinite",
+        "spin-slow": "spin 4s linear infinite",
+        spotlight: "spotlight 2s ease 0.6s 1 forwards",
+        shimmer: "shimmer 2.4s linear infinite",
+        blink: "blink 1s step-end infinite",
       },
     },
   },

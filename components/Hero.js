@@ -1,186 +1,135 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
-import { MagneticButton } from "./ui";
+import { motion } from "framer-motion";
+import Spotlight from "./fx/Spotlight";
+import TextGenerate from "./fx/TextGenerate";
+import ContainerScroll from "./fx/ContainerScroll";
 import { site, services, openBrief } from "@/lib/site";
 import { track } from "@/lib/track";
 
 function useLocalTime() {
-  const [t, setT] = useState(null);
+  const [t, setT] = useState("");
   useEffect(() => {
-    const fmt = new Intl.DateTimeFormat("en-IN", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: false,
-      timeZone: site.timezone,
-    });
+    const fmt = new Intl.DateTimeFormat("en-IN", { hour: "2-digit", minute: "2-digit", hour12: true, timeZone: site.timezone });
     const tick = () => setT(fmt.format(new Date()));
     tick();
-    const id = setInterval(tick, 1000);
+    const id = setInterval(tick, 15000);
     return () => clearInterval(id);
   }, []);
   return t;
 }
 
-function StatusCard({ enter }) {
-  const time = useLocalTime();
-  const rows = [
-    ["Local time", time ? `${time} IST` : "—"],
-    ["Status", site.availability],
-    ["Replies", site.replyTime],
-    ["Typical build", "2 to 6 weeks"],
-  ];
+const fade = (delay) => ({
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] },
+});
 
+/* What the hero "screen" shows: real, shipped work in a browser frame. */
+function Screen() {
   return (
-    <motion.aside
-      {...enter(0.25)}
-      aria-label="Studio status"
-      className="relative mx-auto w-full max-w-[460px] lg:ml-auto"
-    >
-      <div className="relative border border-ink/15 bg-paper-100 shadow-[0_30px_80px_-30px_rgba(22,19,14,0.35)]">
-        <div className="flex items-center justify-between border-b border-ink/12 px-5 py-3.5 font-mono text-[10px] uppercase tracking-[0.18em] text-ink-500">
-          <span>Studio status</span>
-          <span className="flex items-center gap-2 text-ink-600">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#3a9d5d] opacity-60 motion-reduce:hidden" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#3a9d5d]" />
-            </span>
-            Live
+    <div className="relative">
+      <div className="flex items-center gap-2 border-b border-white/10 bg-night-800 px-4 py-3">
+        <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
+        <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
+        <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
+        <span className="mx-auto flex items-center gap-2 rounded-md bg-white/5 px-3 py-1 font-mono text-[11px] text-neutral-400">
+          <svg viewBox="0 0 12 12" className="h-3 w-3" aria-hidden="true"><path d="M3.5 5V3.8a2.5 2.5 0 0 1 5 0V5M2.5 5h7v5h-7z" fill="none" stroke="currentColor" /></svg>
+          jigishakiranshah.in
+        </span>
+      </div>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/work/jigisha.jpeg" alt="Live website built for Jigisha Kiran Shah, an LIC advisor in Ahmedabad" className="aspect-[16/9] w-full object-cover object-top" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-night via-night/40 to-transparent" />
+      <div className="absolute bottom-4 left-4 right-4 flex flex-wrap gap-2 sm:bottom-6 sm:left-6">
+        {["Page 1 on Google", "Mobile first", "Live client site"].map((c) => (
+          <span key={c} className="rounded-full border border-white/15 bg-night/80 px-3 py-1.5 text-xs text-neutral-200 backdrop-blur">
+            {c}
           </span>
-        </div>
-
-        <dl className="divide-y divide-ink/10 px-5">
-          {rows.map(([k, v]) => (
-            <div key={k} className="flex items-baseline justify-between gap-6 py-3.5">
-              <dt className="text-sm text-ink-500">{k}</dt>
-              <dd className="text-right font-mono text-sm tabular-nums text-ink">{v}</dd>
-            </div>
-          ))}
-        </dl>
-
-        <div className="border-t border-ink/12 bg-paper-200/60 px-5 pb-5 pt-4">
-          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-ink-500">
-            What do you need?
-          </p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {services.map((s) => (
-              <button
-                key={s.id}
-                type="button"
-                onClick={() => {
-                  track("service_briefed", { service: s.id, source: "hero_status" });
-                  openBrief(s.id, "hero_status");
-                }}
-                className="group flex items-center gap-1.5 border border-ink/20 bg-paper-100 px-3 py-2 text-sm text-ink-800 transition-colors hover:border-ink hover:bg-ink hover:text-paper"
-              >
-                {s.label}
-                <span aria-hidden="true" className="text-vermillion transition-transform group-hover:translate-x-0.5 group-hover:text-paper">
-                  →
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
+        ))}
       </div>
-
-      <div className="absolute -bottom-4 -left-3 rotate-[-3deg] border border-ink/15 bg-paper px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-ink-600 shadow-sm sm:-left-8">
-        Fixed price before any work starts
-      </div>
-    </motion.aside>
-  );
-}
-
-/* Hand-drawn underline that draws itself in under the key phrase. */
-function Scribble({ children, reduce }) {
-  return (
-    <span className="relative inline-block whitespace-nowrap">
-      <span className="relative z-10">{children}</span>
-      <svg
-        aria-hidden="true"
-        viewBox="0 0 300 20"
-        preserveAspectRatio="none"
-        className="absolute -bottom-1 left-0 z-0 h-[0.32em] w-full text-vermillion sm:-bottom-2"
-      >
-        <motion.path
-          d="M3 14 C 60 4, 120 4, 170 10 S 260 17, 297 6"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="5"
-          strokeLinecap="round"
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1 }}
-          transition={{ duration: 0.9, delay: 0.75, ease: [0.65, 0, 0.35, 1] }}
-        />
-      </svg>
-    </span>
+    </div>
   );
 }
 
 export default function Hero() {
-  const reduce = useReducedMotion();
-  const enter = (delay = 0) => ({
-    initial: { opacity: 0, y: 18 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] },
-  });
+  const time = useLocalTime();
 
   return (
-    <section id="top" className="relative overflow-hidden px-6 pb-20 pt-28 sm:px-10 sm:pb-24 sm:pt-36">
-      {/* faint blueprint grid, fades out toward the bottom */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.5] [background-image:linear-gradient(rgba(22,19,14,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(22,19,14,0.06)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(ellipse_at_30%_20%,#000_20%,transparent_70%)]"
-      />
+    <section id="top" className="relative overflow-hidden px-5 pb-10 pt-36 sm:px-8 sm:pt-44">
+      <Spotlight className="-left-10 -top-40 md:-left-32 md:-top-20" fill="#ff8a63" />
+      <div aria-hidden="true" className="dots fade-edges pointer-events-none absolute inset-0 -z-0 h-[900px]" />
+      <div aria-hidden="true" className="pointer-events-none absolute left-1/2 top-[520px] h-[420px] w-[820px] -translate-x-1/2 rounded-full bg-ember/10 blur-[120px]" />
 
-      <div className="mx-auto grid max-w-page items-center gap-16 lg:grid-cols-[1.2fr_0.8fr]">
-        <div className="min-w-0">
-          <motion.p {...enter(0)} className="flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.16em] text-ink-500 sm:text-xs sm:tracking-[0.2em]">
-            <span className="h-2 w-2 shrink-0 rounded-full bg-vermillion" />
-            Design & engineering studio · {site.city}
-          </motion.p>
+      <div className="relative mx-auto max-w-page text-center">
+        <motion.a
+          {...fade(0)}
+          href="#contact"
+          className="group inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/[0.04] py-1.5 pl-2 pr-4 text-xs text-neutral-300 backdrop-blur transition-colors hover:border-white/20"
+        >
+          <span className="flex items-center gap-1.5 rounded-full bg-[#1f3d2a] px-2 py-0.5 font-medium text-[#7ee2a0]">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#7ee2a0] opacity-70" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#7ee2a0]" />
+            </span>
+            Open
+          </span>
+          {site.availability} · {site.city}
+          <span suppressHydrationWarning className="hidden font-mono text-neutral-500 sm:inline">{time && `${time} IST`}</span>
+          <span aria-hidden="true" className="text-neutral-500 transition-transform group-hover:translate-x-0.5">→</span>
+        </motion.a>
 
-          <motion.h1
-            {...enter(0.1)}
-            className="display mt-8 max-w-4xl text-[2.75rem] font-semibold leading-[0.95] tracking-[-0.045em] sm:text-7xl lg:text-[5.6rem]"
+        <TextGenerate
+          text="Websites, products and AI, built by one person."
+          accent={["one", "person"]}
+          delay={0.15}
+          className="text-silver mx-auto mt-8 max-w-5xl text-[2.9rem] font-semibold leading-[1.02] tracking-[-0.045em] sm:text-7xl lg:text-[5.75rem]"
+        />
+
+        <motion.p {...fade(0.7)} className="mx-auto mt-7 max-w-2xl text-base leading-relaxed text-neutral-400 sm:text-lg">
+          A design and engineering studio of one, in {site.city}. You talk to the
+          person doing the work, get a fixed price before anything starts, and
+          go live in 7 days, not 7 months.
+        </motion.p>
+
+        <motion.div {...fade(0.85)} className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <a
+            href="#contact"
+            onClick={() => track("cta_clicked", { source: "hero" })}
+            className="group inline-flex h-12 items-center gap-2 rounded-full bg-white pl-6 pr-2 text-sm font-medium text-night shadow-[0_0_40px_-8px_rgba(255,255,255,0.5)] transition-transform active:scale-[0.98]"
           >
-            Websites, products and AI, built by{" "}
-            <Scribble reduce={reduce}>one person.</Scribble>
-          </motion.h1>
+            Start a project
+            <span className="grid h-8 w-8 place-items-center rounded-full bg-night text-white transition-transform group-hover:-rotate-45">→</span>
+          </a>
+          <a href="#work" className="inline-flex h-12 items-center rounded-full border border-white/10 px-6 text-sm text-neutral-300 transition-colors hover:border-white/25 hover:text-white">
+            See live work
+          </a>
+        </motion.div>
 
-          <motion.p {...enter(0.22)} className="mt-8 max-w-xl text-lg leading-relaxed text-ink-600 sm:text-xl">
-            For founders and small businesses who want it done properly and done
-            fast. You talk to the person doing the work, get a real number up
-            front, and launch in weeks, not quarters.
-          </motion.p>
-
-          <motion.div {...enter(0.34)} className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-4">
-            <MagneticButton
-              href="#contact"
-              onClick={() => track("cta_clicked", { source: "hero" })}
+        <motion.div {...fade(1)} className="mt-8 flex flex-wrap items-center justify-center gap-2">
+          <span className="mr-1 text-xs text-neutral-500">I need</span>
+          {services.map((s) => (
+            <button
+              key={s.id}
+              type="button"
+              onClick={() => {
+                track("service_briefed", { service: s.id, source: "hero" });
+                openBrief(s.id, "hero");
+              }}
+              className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs text-neutral-300 transition-colors hover:border-ember/60 hover:text-white"
             >
-              Start a project <span aria-hidden="true">↗</span>
-            </MagneticButton>
-            <a href="#work" className="link-underline py-2 text-sm font-medium">
-              See live work first
-            </a>
-          </motion.div>
-
-          <motion.ul {...enter(0.44)} className="mt-12 flex flex-wrap gap-x-7 gap-y-2 border-t border-ink/14 pt-5 text-sm text-ink-600">
-            {["You own all the code", "Page 1 on Google for a live client", `Reply ${site.replyTime}`].map((item) => (
-              <li key={item} className="flex items-center gap-2">
-                <svg aria-hidden="true" viewBox="0 0 12 12" className="h-3 w-3 text-vermillion">
-                  <path d="M1.5 6.5 4.5 9.5 10.5 2.5" fill="none" stroke="currentColor" strokeWidth="1.8" />
-                </svg>
-                {item}
-              </li>
-            ))}
-          </motion.ul>
-        </div>
-
-        <StatusCard enter={enter} />
+              {s.label}
+            </button>
+          ))}
+        </motion.div>
       </div>
+
+      <motion.div {...fade(1.1)} className="relative mx-auto mt-20 max-w-5xl">
+        <ContainerScroll>
+          <Screen />
+        </ContainerScroll>
+      </motion.div>
     </section>
   );
 }

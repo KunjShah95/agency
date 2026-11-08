@@ -39,16 +39,16 @@ export default function StickyCTA() {
           animate={{ y: 0 }}
           exit={{ y: 90 }}
           transition={{ type: "spring", stiffness: 320, damping: 30 }}
-          className="fixed inset-x-3 bottom-3 z-40 flex items-center justify-between gap-3 border border-ink/15 bg-paper/95 py-2 pl-4 pr-2 shadow-[0_12px_40px_-12px_rgba(22,19,14,0.4)] backdrop-blur md:hidden"
+          className="fixed inset-x-3 bottom-3 z-40 flex items-center justify-between gap-3 rounded-full border border-white/10 bg-night-900/85 py-2 pl-5 pr-2 shadow-[0_12px_40px_-12px_rgba(0,0,0,0.9)] backdrop-blur-xl md:hidden"
         >
-          <span className="flex items-center gap-2 text-xs text-ink-600">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#3a9d5d]" />
+          <span className="flex items-center gap-2 text-xs text-neutral-400">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#7ee2a0]" />
             Reply {site.replyTime}
           </span>
           <a
             href="#contact"
             onClick={() => track("cta_clicked", { source: "sticky_mobile" })}
-            className="rounded-editorial bg-ink px-4 py-2.5 text-sm font-medium text-paper active:scale-[0.97]"
+            className="rounded-full bg-white px-5 py-2.5 text-sm font-medium text-night active:scale-[0.97]"
           >
             Start a project
           </a>

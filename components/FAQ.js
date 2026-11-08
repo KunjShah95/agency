@@ -1,57 +1,35 @@
 "use client";
 
 import { useState } from "react";
-import { Section } from "./ui";
+import { AnimatePresence, motion } from "framer-motion";
+import Reveal from "./fx/Reveal";
+import { Section, Heading } from "./fx/Section";
+import { site, mailto, whatsappLink } from "@/lib/site";
 
 const faqs = [
-  {
-    q: "I am not technical. Can you still help?",
-    a: "That is most of who I work with. I handle the design, the code, the AI, and the video, and I explain what I am doing in normal words. You bring the idea, I handle the rest.",
-  },
-  {
-    q: "Do you only build websites?",
-    a: "No. Four things: websites, UI and UX design, AI agents, and AI video. Plenty of projects use two or three of those together, which is easier when it is one person doing them.",
-  },
-  {
-    q: "What does a project cost?",
-    a: "A small one off starts around ₹15,000. A full build is usually ₹60,000 and up. Ongoing work is monthly. I give you a real number after a quick call, not a vague range.",
-  },
-  {
-    q: "How long does it take?",
-    a: "A focused piece of work is one to two weeks. A full build is three to six, depending on how much there is. Video and agent add ons are usually faster.",
-  },
-  {
-    q: "Do I own everything after?",
-    a: "Yes. The code, the design files, all of it is yours. Nothing is locked to a builder platform, so you can host it and change it however you want later.",
-  },
+  ["I'm not technical. Can you still help?", "That is most of who I work with. I handle the design, the code, the AI and the video, and explain what I'm doing in normal words. You bring the idea."],
+  ["Do you only build websites?", "No. Four things: websites, UI/UX design, AI agents and AI video. Plenty of projects use two or three together, which is easier when it is one person doing them."],
+  ["What does a project cost?", "A focused sprint starts around ₹15,000. A full build is usually ₹60,000 and up. Ongoing work is monthly. You get a real number in writing after a short call, not a vague range."],
+  ["How long does it take?", "A website goes live in 7 days: plan on day one, design by day three, built by day six, live on day seven. Bigger builds with apps or AI agents take two to four weeks."],
+  ["Do I own everything after?", "Yes. Code, design files, domain, all of it. Nothing is locked to a builder platform, so you can host it and change it however you like."],
+  ["What if I'm not happy with the design?", "You approve the design before anything is built, and each package includes revision rounds. The point of the design step is that there are no surprises at launch."],
 ];
 
-function Item({ q, a }) {
-  const [open, setOpen] = useState(false);
+function Item({ q, a, i }) {
+  const [open, setOpen] = useState(i === 0);
   return (
-    <div className="border-t border-ink/14">
-      <button
-        onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-center justify-between gap-6 py-6 text-left"
-      >
-        <span className="text-lg font-medium text-ink">{q}</span>
-        <span
-          className={`grid h-7 w-7 shrink-0 place-items-center rounded-editorial border border-ink/30 text-ink-500 transition-transform duration-300 ${
-            open ? "rotate-45 border-vermillion text-vermillion" : ""
-          }`}
-        >
-          +
-        </span>
+    <div className="border-b border-white/10">
+      <button type="button" aria-expanded={open} onClick={() => setOpen((o) => !o)} className="flex w-full items-center justify-between gap-6 py-6 text-left">
+        <span className={`text-base font-medium transition-colors sm:text-lg ${open ? "text-white" : "text-neutral-300"}`}>{q}</span>
+        <span className={`grid h-8 w-8 shrink-0 place-items-center rounded-full border transition-all duration-300 ${open ? "rotate-45 border-ember bg-ember text-night" : "border-white/15 text-neutral-400"}`}>+</span>
       </button>
-      <div
-        className={`grid transition-all duration-300 ${
-          open ? "grid-rows-[1fr] pb-6 opacity-100" : "grid-rows-[0fr] opacity-0"
-        }`}
-      >
-        <p className="max-w-xl overflow-hidden text-[15px] leading-relaxed text-ink-600">
-          {a}
-        </p>
-      </div>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }} className="overflow-hidden">
+            <p className="max-w-2xl pb-6 leading-relaxed text-neutral-400">{a}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -59,20 +37,20 @@ function Item({ q, a }) {
 export default function FAQ() {
   return (
     <Section id="faq">
-      <div className="mx-auto max-w-2xl text-center">
-        <h2 className="display text-4xl font-semibold sm:text-5xl">
-          Before we start.
-        </h2>
-        <p className="mx-auto mt-5 max-w-md text-base leading-relaxed text-ink-600">
-          The questions people usually ask. If yours is not here, just email me.
-        </p>
-      </div>
-
-      <div className="mx-auto mt-14 max-w-2xl text-left">
-        {faqs.map((f) => (
-          <Item key={f.q} {...f} />
-        ))}
-        <div className="border-t border-ink/14" />
+      <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr]">
+        <div>
+          <Heading align="left" eyebrow="FAQ" title="Before we start." />
+          <Reveal delay={0.1}>
+            <p className="mt-5 text-neutral-400">
+              Not here?{" "}
+              <a href={mailto("Question")} className="text-white underline decoration-ember underline-offset-4">Email me</a>
+              {site.whatsapp && <>{" "}or <a href={whatsappLink("Hi, I have a question.")} target="_blank" rel="noreferrer" className="text-white underline decoration-ember underline-offset-4">WhatsApp</a></>}{" "}and I reply {site.replyTime}.
+            </p>
+          </Reveal>
+        </div>
+        <Reveal className="border-t border-white/10">
+          {faqs.map(([q, a], i) => <Item key={q} q={q} a={a} i={i} />)}
+        </Reveal>
       </div>
     </Section>
   );

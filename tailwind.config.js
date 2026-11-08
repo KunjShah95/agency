@@ -1,49 +1,42 @@
+const v = (name) => `rgb(var(${name}) / <alpha-value>)`;
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./app/**/*.{js,jsx}", "./components/**/*.{js,jsx}"],
   theme: {
     extend: {
+      // Every colour is a CSS variable (see globals.css), so light and dark
+      // themes share the exact same classes. "white" means "foreground" and
+      // "night" means "background"; the neutral scale flips with the theme.
       colors: {
-        // Warm newsprint paper canvas + true ink. One accent: vermillion.
-        paper: {
-          DEFAULT: "#EFEDE6",
-          100: "#F5F3ED",
-          200: "#E7E4DA",
-          300: "#DBD7CA",
-        },
-        ink: {
-          DEFAULT: "#16130E",
-          800: "#2A251D",
-          600: "#4A443A",
-          500: "#6B6459",
-          400: "#8C857A",
-        },
-        vermillion: {
-          DEFAULT: "#E23B1E",
-          600: "#C22F14",
-          100: "#F6D9D0",
-        },
+        white: v("--c-fg"),
+        night: { DEFAULT: v("--c-bg"), 900: v("--c-bg-900"), 800: v("--c-bg-800"), 700: v("--c-bg-700") },
+        neutral: Object.fromEntries([100, 200, 300, 400, 500, 600, 700, 800, 900].map((n) => [n, v(`--n-${n}`)])),
+        ember: { DEFAULT: v("--c-ember"), 400: v("--c-ember-400"), 600: v("--c-ember-600") },
+        live: v("--c-live"),
       },
       fontFamily: {
-        display: ["var(--font-display)", "Georgia", "serif"],
-        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
-        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
+        sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
+        mono: ["var(--font-geist-mono)", "ui-monospace", "monospace"],
+        serif: ["var(--font-serif)", "Georgia", "serif"],
       },
-      maxWidth: {
-        page: "1240px",
-      },
-      borderRadius: {
-        // One radius system: sharp editorial. 2px everywhere structural.
-        editorial: "2px",
-      },
+      maxWidth: { page: "1200px" },
       keyframes: {
-        marquee: {
-          from: { transform: "translateX(0)" },
-          to: { transform: "translateX(-50%)" },
+        marquee: { to: { transform: "translateX(-50%)" } },
+        spin: { to: { transform: "rotate(360deg)" } },
+        spotlight: {
+          "0%": { opacity: 0, transform: "translate(-72%, -62%) scale(0.5)" },
+          "100%": { opacity: 1, transform: "translate(-50%, -40%) scale(1)" },
         },
+        shimmer: { to: { backgroundPosition: "-200% 0" } },
+        blink: { "50%": { opacity: 0 } },
       },
       animation: {
-        marquee: "marquee 42s linear infinite",
+        marquee: "marquee var(--duration, 40s) linear infinite",
+        "spin-slow": "spin 4s linear infinite",
+        spotlight: "spotlight 2s ease 0.6s 1 forwards",
+        shimmer: "shimmer 2.4s linear infinite",
+        blink: "blink 1s step-end infinite",
       },
     },
   },

@@ -1,31 +1,31 @@
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
-import Marquee from "@/components/Marquee";
+import Stack from "@/components/Stack";
 import Services from "@/components/Services";
 import Work from "@/components/Work";
-import Stats from "@/components/Stats";
-import WhySolo from "@/components/WhySolo";
+import Compare from "@/components/Compare";
 import Process from "@/components/Process";
 import Packages from "@/components/Packages";
 import FAQ from "@/components/FAQ";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
+import StickyCTA from "@/components/StickyCTA";
 
 export default function Home() {
   return (
-    <main className="relative">
+    <main className="relative overflow-x-clip">
       <Nav />
       <Hero />
-      <Marquee />
+      <Stack />
       <Services />
       <Work />
-      <Stats />
-      <WhySolo />
+      <Compare />
       <Process />
       <Packages />
       <FAQ />
       <CTA />
       <Footer />
+      <StickyCTA />
     </main>
   );
 }

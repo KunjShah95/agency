@@ -51,6 +51,7 @@ const projects = [
       items: [
         { text: "She guided me through every detail and helped me choose the best plan for long-term security.", who: "Dev Chhajed", where: "Ranip, Ahmedabad" },
         { text: "Jigisha ben personally guided me through every step and ensured our claim was settled within 20 days.", who: "Meena Shah", where: "Daxini Society, Ahmedabad" },
+        { text: "Three generations of our family trust Jigisha ben with our financial protection.", who: "Kunj Shah", where: "Ahmedabad" },
       ],
     },
     // Add a line from Jigisha herself about the website once she sends one:

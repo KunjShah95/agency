@@ -68,7 +68,7 @@ Do these in order. Week 1 matters most.
 
 ### Ongoing: publish proof
 9. **Add every finished project** to `lib/projects.js` with real numbers (*"enquiries up 2x"*, *"page 1 for X"*). Specific numbers get quoted; adjectives don't.
-10. **Write one short post a month** answering a question clients ask you, e.g. *"Wix vs custom website for a small business in India"*. Each one is a new way to be found. Ask Claude to add a `/blog` when you're ready.
+10. **Write one short post a month** answering a question clients ask you. The blog is live at `/blog` with four starter posts. To add one, copy `content/blog/_TEMPLATE.md` and follow the notes inside. Each post is a new way to be found.
 11. **Post your work on LinkedIn** with a link back. AI assistants weight what is discussed publicly.
 
 ## How to check it's working

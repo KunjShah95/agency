@@ -28,6 +28,16 @@ Beginner explanation and the off-site plan: `docs/SEO-AEO-GEO-GUIDE.md`.
 4. **Changed a fact** (price, timeline, phone): change it in `lib/site.js` / `lib/content.js`, bump `updated`, and grep the repo for the old value.
 5. **New profile** (LinkedIn, Clutch, Google Business Profile...): add the URL to `site.profiles`. That feeds `sameAs`.
 
+## Blog posts (`content/blog/*.md`)
+- Start from `content/blog/_TEMPLATE.md`. The file name is the slug: lowercase, hyphenated, keyword-bearing.
+- **Title** = the exact question a client types. **Description** under 155 characters.
+- **First paragraph** starts with `**Short answer:**` and answers in 2–3 sentences with real numbers. It renders as a highlighted box, and it's the passage answer boxes and AI assistants quote.
+- `##` headings become the table of contents. Use 4–7 of them, phrased as sub-questions where natural.
+- Add 2–4 `faq` entries (they become FAQPage rich results) and set `service` to the related service slug.
+- Link to at least one service page and one other post. End with a next step (`/#contact`).
+- Same fact rules as everywhere: only real prices, timelines and results. No invented statistics or client claims.
+- `draft: true` keeps a post unpublished.
+
 ## Page rules
 - One `<h1>` per page. Headings never skip a level.
 - Each page sets its own `title`, `description` and `alternates.canonical` via `generateMetadata` / `metadata`.

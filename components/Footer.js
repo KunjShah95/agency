@@ -8,6 +8,7 @@ const links = [
   ["Process", "/#process"],
   ["Pricing", "/#pricing"],
   ["FAQ", "/#faq"],
+  ["Blog", "/blog"],
 ];
 
 export default function Footer() {

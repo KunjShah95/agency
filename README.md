@@ -41,6 +41,19 @@ Start with the beginner guide: `docs/SEO-AEO-GEO-GUIDE.md`. It explains what's b
 - Verification env vars: `NEXT_PUBLIC_GOOGLE_VERIFICATION`, `NEXT_PUBLIC_BING_VERIFICATION`
 - Rules for future Claude sessions: `.claude/skills/seo-aeo-geo/SKILL.md`
 
+## Blog
+
+Posts are Markdown files in `content/blog/`. Copy `content/blog/_TEMPLATE.md`, rename it (the file name becomes the URL), fill in the frontmatter and write. Each post automatically gets:
+
+- its page at `/blog/<file-name>`
+- article, breadcrumb and FAQ structured data
+- an entry in the sitemap, the RSS feed (`/blog/rss.xml`) and `/llms.txt`
+- a table of contents built from its `##` headings
+
+## Analytics
+
+[Vercel Web Analytics](https://vercel.com/docs/analytics) is installed (`<Analytics />` in `app/layout.js`). It's cookieless, so no cookie banner is needed. Turn it on once in the Vercel dashboard: **Project → Analytics → Enable**. The funnel events in `lib/track.js` are also sent as Vercel custom events, which appear under Analytics → Events on plans that include them.
+
 ## Share preview
 
 `app/opengraph-image.js` and `app/twitter-image.js` draw the link preview card at build time (fonts in `assets/og/`).

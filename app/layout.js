@@ -3,6 +3,7 @@ import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import { Instrument_Serif } from "next/font/google";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 import Motion from "@/components/Motion";
 import { themeScript } from "@/components/ThemeToggle";
 import SmoothScroll from "@/components/SmoothScroll";
@@ -90,6 +91,9 @@ export default function RootLayout({ children }) {
         <SmoothScroll />
         <Motion>{children}</Motion>
         <JsonLd data={orgGraph()} />
+        {/* Vercel Web Analytics: cookieless page views. Enable it once in the
+            Vercel dashboard (Project → Analytics → Enable). */}
+        <Analytics />
         {plausible && (
           <>
             <Script defer data-domain={plausible} src="https://plausible.io/js/script.tagged-events.js" strategy="afterInteractive" />

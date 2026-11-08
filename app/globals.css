@@ -124,3 +124,89 @@ p, li, dd, blockquote {
     scroll-behavior: auto !important;
   }
 }
+
+/* Blog article typography, built on the theme tokens so it works in both themes */
+.prose-srijan {
+  color: rgb(var(--n-300));
+  font-size: 1.0625rem;
+  line-height: 1.8;
+}
+.prose-srijan > * + * { margin-top: 1.25em; }
+.prose-srijan h2 {
+  margin-top: 2.4em;
+  font-size: 1.75rem;
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: rgb(var(--c-fg));
+  scroll-margin-top: 6rem;
+}
+.prose-srijan h3 {
+  margin-top: 1.8em;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: rgb(var(--c-fg));
+  scroll-margin-top: 6rem;
+}
+.prose-srijan h2 .anchor,
+.prose-srijan h3 .anchor {
+  margin-left: -1em;
+  padding-right: 0.25em;
+  color: rgb(var(--c-ember));
+  opacity: 0;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.prose-srijan h2:hover .anchor,
+.prose-srijan h3:hover .anchor { opacity: 1; }
+.prose-srijan strong { color: rgb(var(--c-fg)); font-weight: 600; }
+.prose-srijan a {
+  color: rgb(var(--c-fg));
+  text-decoration: underline;
+  text-decoration-color: rgb(var(--c-ember));
+  text-underline-offset: 4px;
+}
+.prose-srijan ul, .prose-srijan ol { padding-left: 1.3em; }
+.prose-srijan ul { list-style: disc; }
+.prose-srijan ol { list-style: decimal; }
+.prose-srijan li { margin-top: 0.45em; padding-left: 0.2em; }
+.prose-srijan li::marker { color: rgb(var(--c-ember)); }
+.prose-srijan code {
+  border-radius: 6px;
+  background: rgb(var(--c-fg) / 0.07);
+  padding: 0.1em 0.4em;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.88em;
+  color: rgb(var(--c-fg));
+}
+.prose-srijan table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border: 1px solid rgb(var(--c-fg) / 0.1);
+  border-radius: 16px;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+.prose-srijan th, .prose-srijan td {
+  padding: 0.8em 1em;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid rgb(var(--c-fg) / 0.06);
+}
+.prose-srijan th { color: rgb(var(--c-fg)); font-weight: 600; background: rgb(var(--c-fg) / 0.03); }
+.prose-srijan tr:last-child td { border-bottom: 0; }
+.prose-srijan blockquote {
+  border-left: 2px solid rgb(var(--c-ember));
+  padding-left: 1em;
+  color: rgb(var(--n-200));
+}
+/* The opening "Short answer" paragraph reads as the summary AI tools quote */
+.prose-srijan > p:first-child {
+  border-radius: 20px;
+  border: 1px solid rgb(var(--c-fg) / 0.1);
+  background: rgb(var(--c-fg) / 0.03);
+  padding: 1.1em 1.3em;
+  color: rgb(var(--n-200));
+}

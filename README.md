@@ -24,6 +24,16 @@ npm start
 
 The 3-step brief ends with "Send my brief on WhatsApp": a direct `wa.me` link to the studio number in `lib/site.js` (+91 91068 78258) with the brief already typed out. The visitor lands in a WhatsApp chat with you and presses send. Email is offered as a fallback.
 
+## SEO, AEO and GEO
+
+Start with the beginner guide: `docs/SEO-AEO-GEO-GUIDE.md`. It explains what's built in and lists the steps only you can take (Search Console, Google Business Profile, reviews, directories).
+
+- Service pages: `app/services/[slug]/page.js`, content in `lib/content.js`
+- Generated `/sitemap.xml`, `/robots.txt` (AI crawlers allowed) and `/llms.txt`
+- Structured data: `lib/schema.jsx` (business, founder, services, FAQs, breadcrumbs)
+- Verification env vars: `NEXT_PUBLIC_GOOGLE_VERIFICATION`, `NEXT_PUBLIC_BING_VERIFICATION`
+- Rules for future Claude sessions: `.claude/skills/seo-aeo-geo/SKILL.md`
+
 ## Share preview
 
 `app/opengraph-image.js` and `app/twitter-image.js` draw the link preview card at build time (fonts in `assets/og/`).

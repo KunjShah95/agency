@@ -7,6 +7,7 @@ import Motion from "@/components/Motion";
 import { themeScript } from "@/components/ThemeToggle";
 import SmoothScroll from "@/components/SmoothScroll";
 import { site } from "@/lib/site";
+import { orgGraph, JsonLd } from "@/lib/schema";
 
 const serif = Instrument_Serif({
   subsets: ["latin"],
@@ -20,30 +21,35 @@ const serif = Instrument_Serif({
 // analytics (no cookie banner needed). See lib/track.js for the events.
 const plausible = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "ProfessionalService",
-  name: site.name,
-  ...(site.url && { url: site.url }),
-  email: site.email,
-  description:
-    "A one person design and engineering studio in Ahmedabad building websites, interfaces, AI agents and AI video.",
-  areaServed: ["Ahmedabad", "Gujarat", "India", "Worldwide"],
-  address: { "@type": "PostalAddress", addressLocality: "Ahmedabad", addressRegion: "Gujarat", addressCountry: "IN" },
-  priceRange: "₹15,000+",
-  knowsAbout: ["Web development", "UI/UX design", "AI agents", "AI video", "Next.js", "SEO"],
-};
+const description =
+  "Srijan Studio is a one person web design and AI studio in Ahmedabad. Websites from ₹15,000, live in 7 days. UI/UX, AI agents and AI video for founders and small businesses.";
 
 export const metadata = {
-  ...(site.url && { metadataBase: new URL(site.url), alternates: { canonical: "/" } }),
-  title: "Srijan Studio · Website, UI/UX and AI agent studio in Ahmedabad",
-  description:
-    "A one person design and engineering studio in Ahmedabad. Websites, UI/UX, AI agents and AI video for founders and small businesses. Fixed price, live in weeks.",
+  metadataBase: new URL(site.url),
+  title: {
+    default: "Website Design & AI Studio in Ahmedabad | Srijan Studio",
+    template: "%s | Srijan Studio",
+  },
+  description,
+  applicationName: site.name,
+  authors: [{ name: site.founder, url: site.url }],
+  creator: site.founder,
+  keywords: [
+    "website design Ahmedabad",
+    "web developer Ahmedabad",
+    "freelance web designer Ahmedabad",
+    "UI UX designer Ahmedabad",
+    "AI agent development India",
+    "Next.js developer India",
+    "AI video production",
+  ],
+  alternates: { canonical: "/" },
   openGraph: {
     title: "Srijan Studio · Websites, products and AI, built by one person",
     description: "A one person design and engineering studio in Ahmedabad. Fixed price, live in 7 days.",
+    url: "/",
     type: "website",
-    siteName: "Srijan Studio",
+    siteName: site.name,
     locale: "en_IN",
   },
   twitter: {
@@ -51,6 +57,14 @@ export const metadata = {
     title: "Srijan Studio · Websites, products and AI, built by one person",
     description: "A one person design and engineering studio in Ahmedabad. Fixed price, live in 7 days.",
   },
+  robots: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
+  // Paste the codes from Google Search Console / Bing Webmaster Tools into
+  // these environment variables in Vercel to verify you own the site.
+  verification: {
+    ...(process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION && { google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION }),
+    ...(process.env.NEXT_PUBLIC_BING_VERIFICATION && { other: { "msvalidate.01": process.env.NEXT_PUBLIC_BING_VERIFICATION } }),
+  },
+  category: "business",
 };
 
 export const viewport = {
@@ -62,14 +76,14 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${GeistSans.variable} ${GeistMono.variable} ${serif.variable}`}>
+    <html lang="en-IN" suppressHydrationWarning className={`${GeistSans.variable} ${GeistMono.variable} ${serif.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body className="font-sans antialiased">
         <SmoothScroll />
         <Motion>{children}</Motion>
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <JsonLd data={orgGraph()} />
         {plausible && (
           <>
             <Script defer data-domain={plausible} src="https://plausible.io/js/script.tagged-events.js" strategy="afterInteractive" />

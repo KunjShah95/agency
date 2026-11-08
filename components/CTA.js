@@ -34,11 +34,11 @@ function Chip({ active, children, onClick }) {
 
 const STEPS = ["What", "Budget", "You"];
 
-export default function CTA() {
+export default function CTA({ initialService } = {}) {
   const sectionRef = useRef(null);
   const started = useRef(false);
   const [step, setStep] = useState(0);
-  const [picked, setPicked] = useState([]);
+  const [picked, setPicked] = useState(initialService ? [initialService] : []);
   const [budget, setBudget] = useState("");
   const [timeline, setTimeline] = useState("");
   const [name, setName] = useState("");

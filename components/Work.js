@@ -44,7 +44,16 @@ const projects = [
       ["6 goals", "each one a pre-filled WhatsApp"],
       ["Own domain", "jigishakiranshah.in"],
     ],
-    // Add a line from Jigisha here once she sends one:
+    // Reviews from Jigisha's own clients, shown on the testimonials section
+    // built for her site. Labelled as such: they praise her, not the studio.
+    siteReviews: {
+      label: "From the reviews section I built for her",
+      items: [
+        { text: "She guided me through every detail and helped me choose the best plan for long-term security.", who: "Dev Chhajed", where: "Ranip, Ahmedabad" },
+        { text: "Jigisha ben personally guided me through every step and ensured our claim was settled within 20 days.", who: "Meena Shah", where: "Daxini Society, Ahmedabad" },
+      ],
+    },
+    // Add a line from Jigisha herself about the website once she sends one:
     // quote: { text: "...", who: "Jigisha Kiran Shah", where: "LIC Advisor, Ahmedabad" },
   },
   {
@@ -152,6 +161,23 @@ function Case({ p, i }) {
               </div>
             ))}
           </div>
+          {p.siteReviews && (
+            <div className="mt-8">
+              <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-neutral-500">
+                <span className="text-ember">★ 5.0</span> {p.siteReviews.label}
+              </div>
+              <ul className="mt-3 space-y-2.5">
+                {p.siteReviews.items.map((r) => (
+                  <li key={r.text} className="rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-3">
+                    <p className="text-sm leading-relaxed text-neutral-300">&ldquo;{r.text}&rdquo;</p>
+                    <p className="mt-1.5 text-xs text-neutral-500">
+                      <span className="text-neutral-300">{r.who}</span> · {r.where}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           {p.quote && (
             <figure className="mt-8 rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.04] to-transparent p-5 sm:p-6">
               <div className="flex gap-0.5 text-ember" aria-label="5 out of 5">

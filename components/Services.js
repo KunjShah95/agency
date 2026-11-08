@@ -5,6 +5,7 @@ import SpotlightCard from "./fx/SpotlightCard";
 import Reveal from "./fx/Reveal";
 import { Section, Heading, Serif } from "./fx/Section";
 import { openBrief } from "@/lib/site";
+import { servicePageById } from "@/lib/content";
 import { track } from "@/lib/track";
 
 /* ---------- tiny looping visuals, one per service ---------- */
@@ -197,7 +198,9 @@ export default function Services() {
                 <div className={s.tall ? "h-80 lg:h-auto lg:min-h-80 lg:flex-1" : "h-48"}>
                   <s.Visual />
                 </div>
-                <h3 className="mt-6 text-xl font-semibold tracking-tight text-white">{s.title}</h3>
+                <h3 className="mt-6 text-xl font-semibold tracking-tight text-white">
+                  <a href={`/services/${servicePageById[s.id].slug}`} className="transition-colors hover:text-ember">{s.title}</a>
+                </h3>
                 <p className="mt-2 text-sm leading-relaxed text-neutral-400">{s.body}</p>
                 <div className="mt-4 flex flex-wrap gap-1.5">
                   {s.tags.map((t) => (
@@ -206,7 +209,12 @@ export default function Services() {
                 </div>
                 <div className={s.tall ? "h-6" : "min-h-6 flex-1"} />
                 <div className="flex items-center justify-between border-t border-white/10 pt-4">
-                  <span className="font-mono text-xs text-neutral-500">{s.price}</span>
+                  <span className="flex items-center gap-3">
+                    <span className="font-mono text-xs text-neutral-500">{s.price}</span>
+                    <a href={`/services/${servicePageById[s.id].slug}`} className="text-xs text-neutral-400 underline decoration-white/20 underline-offset-4 hover:text-white">
+                      Details<span className="sr-only"> about {s.title}</span>
+                    </a>
+                  </span>
                   <button
                     type="button"
                     onClick={() => {

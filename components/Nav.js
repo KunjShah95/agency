@@ -8,11 +8,11 @@ import { site } from "@/lib/site";
 import { track } from "@/lib/track";
 
 const links = [
-  { label: "Services", href: "#services" },
-  { label: "Work", href: "#work" },
-  { label: "Process", href: "#process" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "FAQ", href: "#faq" },
+  { label: "Services", href: "/#services" },
+  { label: "Work", href: "/#work" },
+  { label: "Process", href: "/#process" },
+  { label: "Pricing", href: "/#pricing" },
+  { label: "FAQ", href: "/#faq" },
 ];
 
 /* Floating pill nav that tightens once you scroll. */
@@ -32,7 +32,7 @@ export default function Nav() {
         }`}
       >
         <div className="flex h-14 items-center justify-between pl-5 pr-2">
-          <a href="#top" className="flex items-center gap-2 text-[15px] font-semibold tracking-tight text-white">
+          <a href="/" className="flex items-center gap-2 text-[15px] font-semibold tracking-tight text-white">
             <span className="grid h-6 w-6 place-items-center rounded-md bg-ember font-serif text-base italic leading-none text-night">s</span>
             Srijan
           </a>
@@ -50,7 +50,7 @@ export default function Nav() {
           <div className="flex items-center gap-2">
             <ThemeToggle />
             <MovingBorder
-              href="#contact"
+              href="/#contact"
               onClick={() => track("cta_clicked", { source: "nav" })}
               className="hidden h-10 sm:inline-flex"
               innerClassName="px-5"
@@ -88,7 +88,7 @@ export default function Nav() {
                 </a>
               ))}
               <a
-                href="#contact"
+                href="/#contact"
                 onClick={() => {
                   setOpen(false);
                   track("cta_clicked", { source: "mobile_menu" });

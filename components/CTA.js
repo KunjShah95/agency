@@ -34,11 +34,11 @@ function Chip({ active, children, onClick }) {
 
 const STEPS = ["What", "Budget", "You"];
 
-export default function CTA() {
+export default function CTA({ initialService } = {}) {
   const sectionRef = useRef(null);
   const started = useRef(false);
   const [step, setStep] = useState(0);
-  const [picked, setPicked] = useState([]);
+  const [picked, setPicked] = useState(initialService ? [initialService] : []);
   const [budget, setBudget] = useState("");
   const [timeline, setTimeline] = useState("");
   const [name, setName] = useState("");
@@ -85,10 +85,14 @@ export default function CTA() {
 
   const canNext = [picked.length > 0, Boolean(budget && timeline), name.trim().length > 1][step];
   const wa = whatsappLink(message);
+  const mail = mailto(`Project brief: ${labels.join(", ") || "new project"}`, message);
 
-  const send = (channel) => {
+  /* The primary button is a plain link to wa.me, so the click itself opens
+     WhatsApp (no pop-up blocker) on a chat with the studio number, with the
+     brief already typed out. */
+  const opened = (channel) => {
     track("brief_submitted", { channel, services: picked.join(","), budget, timeline });
-    setSent(true);
+    setSent(channel);
   };
 
   const slide = {
@@ -107,7 +111,7 @@ export default function CTA() {
             Tell me what you <Serif>want built.</Serif>
           </h2>
           <p className="mx-auto mt-5 max-w-md text-neutral-400 sm:text-lg">
-            Three taps and a sentence. I reply {site.replyTime} with a plan, a
+            Three taps and your name. It opens WhatsApp with your brief ready to send. I reply {site.replyTime} with a plan, a
             timeline and a real number.
           </p>
         </Reveal>
@@ -146,12 +150,34 @@ export default function CTA() {
                   {sent ? (
                     <motion.div key="sent" {...slide} className="flex h-full flex-col items-center justify-center text-center">
                       <div className="grid h-14 w-14 place-items-center rounded-full bg-ember/15 text-2xl text-ember">✓</div>
-                      <div className="mt-6 text-3xl font-semibold text-white">Thanks{name ? `, ${name.split(" ")[0]}` : ""}.</div>
+                      <div className="mt-6 text-3xl font-semibold text-white">
+                        {sent === "email" ? "Your email is ready" : "WhatsApp is opening"}{name ? `, ${name.split(" ")[0]}` : ""}.
+                      </div>
                       <p className="mt-3 max-w-sm text-neutral-400">
-                        Your message should be open and ready to send in your mail or WhatsApp app. Once it lands, I reply {site.replyTime}.
+                        {sent === "email"
+                          ? <>Your brief is written in your mail app, addressed to {site.email}. Press send and I reply {site.replyTime}.</>
+                          : <>Your brief is typed out in a chat with me on {site.phone}. Just press send, and I reply {site.replyTime}.</>}
                       </p>
-                      <button type="button" onClick={() => { setSent(false); setStep(2); }} className="mt-6 text-sm text-neutral-400 underline decoration-white/20 underline-offset-4 hover:text-white">
-                        Didn&apos;t open? Try again
+                      <div className="mt-6 flex flex-wrap justify-center gap-3">
+                        {wa && (
+                          <a
+                            href={wa}
+                            target="_blank"
+                            rel="noreferrer"
+                            onClick={() => track("whatsapp_clicked", { source: "brief_again" })}
+                            className="inline-flex h-12 items-center gap-2 rounded-full bg-[#25d366] px-6 text-sm font-medium text-[#062b14] transition-transform active:scale-[0.98]"
+                          >
+                            <WhatsAppIcon /> {sent === "email" ? "Send on WhatsApp instead" : "Open WhatsApp again"}
+                          </a>
+                        )}
+                        {sent !== "email" && (
+                          <a href={mail} onClick={() => setSent("email")} className="inline-flex h-12 items-center rounded-full border border-white/15 px-6 text-sm text-white hover:border-white/40">
+                            Email instead
+                          </a>
+                        )}
+                      </div>
+                      <button type="button" onClick={() => { setSent(false); setStep(2); }} className="mt-6 text-sm text-neutral-500 underline decoration-white/20 underline-offset-4 hover:text-white">
+                        Edit my brief
                       </button>
                     </motion.div>
                   ) : step === 0 ? (
@@ -224,26 +250,24 @@ export default function CTA() {
                       Next →
                     </button>
                   ) : (
-                    <div className="flex flex-wrap gap-3">
-                      {wa && (
-                        <a
-                          href={canNext ? wa : undefined}
-                          target="_blank"
-                          rel="noreferrer"
-                          aria-disabled={!canNext}
-                          onClick={(e) => (canNext ? send("whatsapp") : e.preventDefault())}
-                          className={`inline-flex h-12 items-center gap-2 rounded-full border border-white/15 px-6 text-sm font-medium text-white transition-colors hover:border-[#25d366] hover:text-[#25d366] ${canNext ? "" : "pointer-events-none opacity-25"}`}
-                        >
-                          <WhatsAppIcon /> Send on WhatsApp
-                        </a>
-                      )}
+                    <div className="flex flex-wrap items-center gap-4">
                       <a
-                        href={canNext ? mailto(`Project brief: ${labels.join(", ") || "new project"}`, message) : undefined}
+                        href={canNext ? mail : undefined}
                         aria-disabled={!canNext}
-                        onClick={(e) => (canNext ? send("email") : e.preventDefault())}
+                        onClick={(e) => (canNext ? opened("email") : e.preventDefault())}
+                        className={`text-sm text-neutral-500 underline decoration-white/20 underline-offset-4 hover:text-white ${canNext ? "" : "pointer-events-none opacity-40"}`}
+                      >
+                        or email
+                      </a>
+                      <a
+                        href={canNext ? wa || mail : undefined}
+                        target={wa ? "_blank" : undefined}
+                        rel="noreferrer"
+                        aria-disabled={!canNext}
+                        onClick={(e) => (canNext ? opened(wa ? "whatsapp" : "email") : e.preventDefault())}
                         className={`inline-flex h-12 items-center gap-2 rounded-full bg-ember px-6 text-sm font-medium text-night shadow-[0_0_30px_-6px_rgba(255,91,46,0.8)] transition-colors hover:bg-white ${canNext ? "" : "pointer-events-none opacity-25"}`}
                       >
-                        Send my brief ↗
+                        {wa && <WhatsAppIcon />} Send my brief on WhatsApp ↗
                       </a>
                     </div>
                   )}

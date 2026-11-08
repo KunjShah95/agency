@@ -19,9 +19,13 @@ export default function SmoothScroll() {
 
     // keep in-page anchor links working
     const onClick = (e) => {
-      const a = e.target.closest('a[href^="#"]');
+      const a = e.target.closest('a[href^="#"], a[href^="/#"]');
       if (!a) return;
-      const id = a.getAttribute("href");
+      let id = a.getAttribute("href");
+      if (id.startsWith("/#")) {
+        if (window.location.pathname !== "/") return; // let the browser go home
+        id = id.slice(1);
+      }
       if (id.length > 1) {
         const el = document.querySelector(id);
         if (el) {

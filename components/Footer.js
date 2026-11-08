@@ -63,7 +63,7 @@ export default function Footer() {
       </div>
 
       <div className="mx-auto flex max-w-page flex-col items-center justify-between gap-2 border-t border-white/10 py-6 font-mono text-[11px] text-neutral-600 sm:flex-row">
-        <span>© {year} {site.name}</span>
+        <span>© {year} {site.name} · <a href="/privacy" className="transition-colors hover:text-white">Privacy</a></span>
         <address className="not-italic">{site.city}, Gujarat, India · working everywhere</address>
       </div>
     </footer>

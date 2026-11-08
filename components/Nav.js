@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
 import MovingBorder from "./fx/MovingBorder";
 import ThemeToggle from "./ThemeToggle";
 import { site } from "@/lib/site";
+import { servicePages } from "@/lib/content";
 import { track } from "@/lib/track";
 
 const links = [
@@ -21,9 +23,86 @@ export default function Nav() {
   const [compact, setCompact] = useState(false);
   const [open, setOpen] = useState(false);
   useMotionValueEvent(scrollY, "change", (v) => setCompact(v > 40));
+  const pathname = usePathname();
+  const isCurrent = (l) => l.label === "Services" && pathname?.startsWith("/services");
+
+  // Full-screen menu: lock page scroll and close on Escape.
+  useEffect(() => {
+    if (!open) return;
+    window.__lenis?.stop();
+    document.documentElement.style.overflow = "hidden";
+    const onKey = (e) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.__lenis?.start();
+      document.documentElement.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-3 pt-3 sm:pt-4">
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            id="mobile-nav"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 overflow-y-auto bg-night/95 px-6 pb-10 pt-28 backdrop-blur-2xl md:hidden"
+          >
+            <motion.ul
+              initial="hidden"
+              animate="show"
+              variants={{ show: { transition: { staggerChildren: 0.05 } } }}
+              className="space-y-1"
+            >
+              {links.map((l) => (
+                <motion.li key={l.href} variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } } }}>
+                  <a
+                    href={l.href}
+                    aria-current={isCurrent(l) ? "page" : undefined}
+                    onClick={() => setOpen(false)}
+                    className={`flex items-center justify-between border-b border-white/10 py-4 text-3xl font-semibold tracking-tight ${isCurrent(l) ? "text-ember" : "text-white"}`}
+                  >
+                    {l.label} <span aria-hidden="true" className="text-xl text-neutral-600">→</span>
+                  </a>
+                </motion.li>
+              ))}
+              <motion.li variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } } }} className="pt-6">
+                <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-neutral-500">Services</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {servicePages.map((sp) => (
+                    <a
+                      key={sp.slug}
+                      href={`/services/${sp.slug}`}
+                      aria-current={pathname === `/services/${sp.slug}` ? "page" : undefined}
+                      onClick={() => setOpen(false)}
+                      className={`rounded-full border px-3.5 py-2 text-sm ${pathname === `/services/${sp.slug}` ? "border-ember text-white" : "border-white/10 text-neutral-300"}`}
+                    >
+                      {sp.name}
+                    </a>
+                  ))}
+                </div>
+              </motion.li>
+              <motion.li variants={{ hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } } }} className="pt-8">
+                <a
+                  href="/#contact"
+                  onClick={() => {
+                    setOpen(false);
+                    track("cta_clicked", { source: "mobile_menu" });
+                  }}
+                  className="block rounded-full bg-white py-4 text-center text-base font-medium text-night active:scale-[0.98]"
+                >
+                  Start a project
+                </a>
+                <p className="mt-3 text-center text-xs text-neutral-500">Reply {site.replyTime} · {site.phone}</p>
+              </motion.li>
+            </motion.ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
       <motion.nav
         animate={{ maxWidth: compact ? 860 : 1200 }}
         transition={{ type: "spring", stiffness: 260, damping: 30 }}
@@ -40,7 +119,11 @@ export default function Nav() {
           <ul className="hidden items-center gap-1 md:flex">
             {links.map((l) => (
               <li key={l.href}>
-                <a href={l.href} className="rounded-full px-3.5 py-2 text-sm text-neutral-400 transition-colors hover:bg-white/5 hover:text-white">
+                <a
+                  href={l.href}
+                  aria-current={isCurrent(l) ? "page" : undefined}
+                  className={`rounded-full px-3.5 py-2 text-sm transition-colors hover:bg-white/5 hover:text-white ${isCurrent(l) ? "text-white" : "text-neutral-400"}`}
+                >
                   {l.label}
                 </a>
               </li>
@@ -66,41 +149,13 @@ export default function Nav() {
               className="grid h-10 w-10 place-items-center rounded-full border border-white/10 md:hidden"
             >
               <span className="relative block h-3 w-4">
-                <span className={`absolute left-0 top-0 h-px w-4 bg-white transition-transform ${open ? "translate-y-1.5 rotate-45" : ""}`} />
-                <span className={`absolute bottom-0 left-0 h-px w-4 bg-white transition-transform ${open ? "-translate-y-1.5 -rotate-45" : ""}`} />
+                <span className={`absolute left-0 top-0 h-px w-4 bg-white transition-transform duration-500 ${open ? "translate-y-1.5 rotate-45" : ""}`} />
+                <span className={`absolute bottom-0 left-0 h-px w-4 bg-white transition-transform duration-500 ${open ? "-translate-y-1.5 -rotate-45" : ""}`} />
               </span>
             </button>
           </div>
         </div>
 
-        <AnimatePresence>
-          {open && (
-            <motion.div
-              id="mobile-nav"
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              className="absolute inset-x-0 top-16 rounded-3xl border border-white/10 bg-night-900/95 p-3 backdrop-blur-xl md:hidden"
-            >
-              {links.map((l) => (
-                <a key={l.href} href={l.href} onClick={() => setOpen(false)} className="flex items-center justify-between rounded-2xl px-4 py-3 text-neutral-300 hover:bg-white/5">
-                  {l.label} <span className="text-neutral-600">→</span>
-                </a>
-              ))}
-              <a
-                href="/#contact"
-                onClick={() => {
-                  setOpen(false);
-                  track("cta_clicked", { source: "mobile_menu" });
-                }}
-                className="mt-2 block rounded-2xl bg-white py-3 text-center text-sm font-medium text-night"
-              >
-                Start a project
-              </a>
-              <p className="mt-3 text-center text-xs text-neutral-500">Reply {site.replyTime}</p>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </motion.nav>
     </header>
   );

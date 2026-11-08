@@ -4,6 +4,7 @@ import Stack from "@/components/Stack";
 import Services from "@/components/Services";
 import Work from "@/components/Work";
 import Compare from "@/components/Compare";
+import Tagline from "@/components/Tagline";
 import Process from "@/components/Process";
 import Packages from "@/components/Packages";
 import FAQ from "@/components/FAQ";
@@ -15,12 +16,13 @@ import { homeFaqs } from "@/lib/content";
 
 export default function Home() {
   return (
-    <main className="relative overflow-x-clip">
+    <main id="main" className="relative overflow-x-clip">
       <Nav />
       <Hero />
       <Stack />
       <Services />
       <Work />
+      <Tagline />
       <Compare />
       <Process />
       <Packages />

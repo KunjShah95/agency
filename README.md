@@ -24,6 +24,13 @@ npm start
 
 The 3-step brief ends with "Send my brief on WhatsApp": a direct `wa.me` link to the studio number in `lib/site.js` (+91 91068 78258) with the brief already typed out. The visitor lands in a WhatsApp chat with you and presses send. Email is offered as a fallback.
 
+## Design system and Claude skills
+
+Two project skills in `.claude/skills/` are picked up automatically by Claude Code in this repo:
+
+- **`srijan-landing-design`**: the page strategy, conversion, copy and visual rules for this site. Adapted from [elayadesign/ai-design-skills](https://github.com/elayadesign/ai-design-skills) `landing-page-design` (MIT). The original is kept for reference in `docs/vendor/elayadesign-landing-page-design/`.
+- **`seo-aeo-geo`**: rules for search engines, answer boxes and AI assistants.
+
 ## SEO, AEO and GEO
 
 Start with the beginner guide: `docs/SEO-AEO-GEO-GUIDE.md`. It explains what's built in and lists the steps only you can take (Search Console, Google Business Profile, reviews, directories).

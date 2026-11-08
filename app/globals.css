@@ -71,6 +71,21 @@ body {
   color: rgb(var(--c-bg));
 }
 
+/* No orphaned words: balanced headings, "pretty" paragraphs */
+h1, h2, h3, h4, h5, h6, legend {
+  text-wrap: balance;
+}
+p, li, dd, blockquote {
+  text-wrap: pretty;
+}
+
+/* Tagline reveal: under reduced motion, show the final colour straight away */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-word {
+    opacity: 1 !important;
+  }
+}
+
 /* Faint dot grid, faded toward the edges */
 .dots {
   background-image: radial-gradient(rgb(var(--c-fg) / 0.11) 1px, transparent 1px);

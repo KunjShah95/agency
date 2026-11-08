@@ -21,6 +21,9 @@ module.exports = {
         serif: ["var(--font-serif)", "Georgia", "serif"],
       },
       maxWidth: { page: "1200px" },
+      // One motion curve for the whole site: weighted, decelerating.
+      transitionTimingFunction: { DEFAULT: "cubic-bezier(0.22, 1, 0.36, 1)" },
+      transitionDuration: { DEFAULT: "300ms" },
       keyframes: {
         marquee: { to: { transform: "translateX(-50%)" } },
         spin: { to: { transform: "rotate(360deg)" } },

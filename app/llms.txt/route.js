@@ -1,6 +1,7 @@
 import { site } from "@/lib/site";
 import { servicePages, homeFaqs, updated } from "@/lib/content";
 import { projects } from "@/lib/projects";
+import { getAllPosts } from "@/lib/blog";
 
 /*
  * /llms.txt: a plain-text briefing for AI assistants (the llmstxt.org
@@ -30,6 +31,9 @@ export function GET() {
     "",
     "## Selected work",
     ...projects.map((p) => `- [${p.title}](${p.href}): ${p.built}${p.quote ? ` Client review: "${p.quote.text}" (${p.quote.who})` : ""}`),
+    "",
+    "## Guides (blog)",
+    ...getAllPosts().map((p) => `- [${p.title}](${base}/blog/${p.slug}): ${p.description}`),
     "",
     "## Frequently asked questions",
     ...homeFaqs.flatMap((f) => [`### ${f.q}`, f.a, ""]),

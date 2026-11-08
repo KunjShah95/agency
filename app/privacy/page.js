@@ -26,7 +26,7 @@ const sections = [
   {
     h: "Analytics",
     p: [
-      "If analytics are switched on, the site uses Plausible, which counts visits and button clicks without cookies and without collecting personal data. It cannot identify you.",
+      "The site uses Vercel Web Analytics to count page views and button clicks. It uses no cookies, does not track you across other sites, and does not collect personal data such as your name or number. Visits are counted with an anonymous identifier that resets every day. If Plausible is switched on, it works the same way.",
     ],
   },
   {

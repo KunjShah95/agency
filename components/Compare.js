@@ -9,7 +9,31 @@ const rows = [
   ["Who it's built for", "Enterprise accounts", "Founders and local businesses"],
 ];
 
+function Cross() {
+  return (
+    <svg viewBox="0 0 12 12" className="mt-[3px] h-3 w-3 shrink-0 text-neutral-600" aria-hidden="true">
+      <path d="M3 3l6 6M9 3 3 9" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function Check() {
+  return (
+    <span className="mt-px grid h-4 w-4 shrink-0 place-items-center rounded-full bg-ember/15" aria-hidden="true">
+      <svg viewBox="0 0 12 12" className="h-2.5 w-2.5 text-ember">
+        <path d="M2.5 6.5 5 9l4.5-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </span>
+  );
+}
+
+/*
+ * The Srijan column is a raised panel that sits inside the table's own
+ * grid, so its edges always line up with the cells. Orange is used only
+ * for the small ticks; everything else stays neutral.
+ */
 export default function Compare() {
+  const last = rows.length - 1;
   return (
     <Section id="why">
       <Heading
@@ -18,23 +42,39 @@ export default function Compare() {
       />
 
       <Reveal className="mt-16">
-        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-night-900">
-          {/* highlighted column glow */}
-          <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 right-0 hidden w-[37%] border-l border-ember/30 bg-gradient-to-b from-ember/10 via-ember/[0.03] to-transparent sm:block" />
-          <table className="relative w-full text-left text-sm">
+        <div className="overflow-x-auto rounded-3xl border border-white/10 bg-night-900 p-2 sm:p-3">
+          <table className="w-full min-w-[34rem] border-separate border-spacing-0 text-left text-sm">
+            <caption className="sr-only">Srijan Studio compared with a typical agency</caption>
             <thead>
-              <tr className="border-b border-white/10 font-mono text-[11px] uppercase tracking-[0.14em]">
-                <th scope="col" className="w-[26%] p-4 font-normal text-neutral-500 sm:p-6"><span className="sr-only">Compare</span></th>
-                <th scope="col" className="p-4 font-normal text-neutral-500 sm:p-6">Typical agency</th>
-                <th scope="col" className="p-4 font-normal text-ember sm:p-6">Srijan</th>
+              <tr className="font-mono text-[11px] uppercase tracking-[0.14em]">
+                <th scope="col" className="w-[28%] px-4 pb-4 pt-5 font-normal sm:px-5">
+                  <span className="sr-only">Compare</span>
+                </th>
+                <th scope="col" className="w-[34%] px-4 pb-4 pt-5 font-normal text-neutral-500 sm:px-5">Typical agency</th>
+                <th scope="col" className="rounded-t-2xl border-x border-t border-white/10 bg-night-800 px-4 pb-4 pt-5 font-normal text-white sm:px-5">
+                  <span className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-ember" aria-hidden="true" />
+                    Srijan
+                  </span>
+                </th>
               </tr>
             </thead>
             <tbody>
-              {rows.map(([k, them, me]) => (
-                <tr key={k} className="border-b border-white/5 last:border-0">
-                  <th scope="row" className="p-4 align-top font-normal text-neutral-500 sm:p-6">{k}</th>
-                  <td className="p-4 align-top text-neutral-500 line-through decoration-white/20 sm:p-6">{them}</td>
-                  <td className="p-4 align-top font-medium text-white sm:p-6">{me}</td>
+              {rows.map(([k, them, me], i) => (
+                <tr key={k}>
+                  <th scope="row" className={`px-4 py-4 align-top font-normal text-neutral-400 sm:px-5 sm:py-5 ${i < last ? "border-b border-white/5" : ""}`}>
+                    {k}
+                  </th>
+                  <td className={`px-4 py-4 align-top text-neutral-500 sm:px-5 sm:py-5 ${i < last ? "border-b border-white/5" : ""}`}>
+                    <span className="flex gap-2.5"><Cross />{them}</span>
+                  </td>
+                  <td
+                    className={`border-x border-white/10 bg-night-800 px-4 py-4 align-top font-medium text-white sm:px-5 sm:py-5 ${
+                      i < last ? "border-b border-b-white/5" : "rounded-b-2xl border-b"
+                    }`}
+                  >
+                    <span className="flex gap-2.5"><Check />{me}</span>
+                  </td>
                 </tr>
               ))}
             </tbody>

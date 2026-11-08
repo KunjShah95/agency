@@ -15,6 +15,7 @@ const links = [
   { label: "Process", href: "/#process" },
   { label: "Pricing", href: "/#pricing" },
   { label: "FAQ", href: "/#faq" },
+  { label: "Blog", href: "/blog" },
 ];
 
 /* Floating pill nav that tightens once you scroll. */
@@ -24,7 +25,8 @@ export default function Nav() {
   const [open, setOpen] = useState(false);
   useMotionValueEvent(scrollY, "change", (v) => setCompact(v > 40));
   const pathname = usePathname();
-  const isCurrent = (l) => l.label === "Services" && pathname?.startsWith("/services");
+  const isCurrent = (l) =>
+    (l.label === "Services" && pathname?.startsWith("/services")) || (l.label === "Blog" && pathname?.startsWith("/blog"));
 
   // Full-screen menu: lock page scroll and close on Escape.
   useEffect(() => {

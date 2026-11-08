@@ -107,7 +107,18 @@ export default function Hero() {
           </a>
         </motion.div>
 
-        <motion.div {...fade(1)} className="mt-8 flex flex-wrap items-center justify-center gap-2">
+        {/* Proof above the fold: a real client review, linked to the case study */}
+        <motion.a
+          {...fade(0.95)}
+          href="#work"
+          className="group mx-auto mt-8 block max-w-md text-sm text-neutral-400 transition-colors hover:text-neutral-200"
+        >
+          <span className="mr-2 tracking-[0.15em] text-ember" role="img" aria-label="Rated 5 out of 5">★★★★★</span>
+          &ldquo;You understood our vision and brought it to life exactly the way we wanted.&rdquo;
+          <span className="text-neutral-500"> Swarnika Jewellery</span>
+        </motion.a>
+
+        <motion.div {...fade(1.05)} className="mt-6 flex flex-wrap items-center justify-center gap-2">
           <span className="mr-1 text-xs text-neutral-500">I need</span>
           {services.map((s) => (
             <button

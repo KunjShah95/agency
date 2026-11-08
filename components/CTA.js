@@ -43,6 +43,7 @@ export default function CTA({ initialService } = {}) {
   const [timeline, setTimeline] = useState("");
   const [name, setName] = useState("");
   const [note, setNote] = useState("");
+  const [business, setBusiness] = useState("");
   const [sent, setSent] = useState(false);
 
   const start = (source = "form") => {
@@ -75,7 +76,9 @@ export default function CTA({ initialService } = {}) {
 
   const labels = [...services, { id: "other", label: "Something else" }].filter((s) => picked.includes(s.id)).map((s) => s.label);
   const message = [
-    `Hi, I'm ${name || "…"}.`,
+    "New project brief (via srijanstudio.vercel.app)",
+    "",
+    `Hi, I'm ${name || "…"}${business ? ` from ${business}` : ""}.`,
     "",
     `I need: ${labels.join(", ") || "not sure yet"}`,
     `Budget: ${budget || "not sure yet"}`,
@@ -217,6 +220,16 @@ export default function CTA({ initialService } = {}) {
                           autoComplete="name"
                           placeholder="So I know who I'm talking to"
                           className="mt-3 w-full border-b border-white/15 bg-transparent py-3 text-lg text-white outline-none transition-colors placeholder:text-neutral-600 focus:border-ember"
+                        />
+                      </label>
+                      <label className="block">
+                        <span className="text-sm text-neutral-400">Business name <span className="text-neutral-600">(optional)</span></span>
+                        <input
+                          value={business}
+                          onChange={(e) => setBusiness(e.target.value)}
+                          autoComplete="organization"
+                          placeholder="e.g. Shah Dental Clinic"
+                          className="mt-2 w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3.5 text-[15px] text-white outline-none transition-colors placeholder:text-neutral-600 focus:border-ember"
                         />
                       </label>
                       <label className="block">
